@@ -1,24 +1,29 @@
 <div class="container">
     <div class="row">
-        
+
         <div class="col-12 col-md-6">
             <h1 class="text-center">Login</h1>
-            <form class="row g-3">
+            <form action="/auth/login" method="POST" class="row g-3">
                 <div class="col-md-12">
-                    <label for="inputUsername" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="inputUsername" required>
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" id="inputEmail">
                 </div>
                 <div class="col-md-12">
-                    <label for="inputPassword" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="inputPassword" required>
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" id="inputPassword">
                 </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-success">Sign in</button>
                 </div>
             </form>
-            <p>Not a member? <a href="">Signup</a></p>
+
+            {{#if errorMessage}}
+            <p>{{errorMessage}}</p>
+            {{/if}}
+
+            <p>Not a member? <a href="/auth/signup">Signup</a></p>
         </div>
 
-        <div class="col-12 col-md-6">col-6</div>
+        {{!-- <div class="col-12 col-md-6">col-6</div> --}}
     </div>
 </div>
