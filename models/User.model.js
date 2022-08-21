@@ -22,10 +22,10 @@ const userSchema = new Schema(
       required: [true, "Password is required."],
     },
     recipes: [{ type: Schema.Types.ObjectId, ref: "Recipes" }],
-    imageUrl: {
-      type: String,
-      default: String,
-    },
+    // imageUrl: {
+    //   type: String,
+    //   // default: String,
+    // },
   },
   {
     timestamps: true,
