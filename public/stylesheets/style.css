@@ -1,5 +1,5 @@
 body {
-  padding: 50px;
+  /* padding: 50px; */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -9,4 +9,13 @@ a {
 
 h1 {
   color: 15px;
+}
+
+.home-hero {
+  background-image: url(../images/home-cover.jpg);
+  background: url(../images/home-cover.jpg) no-repeat center center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
