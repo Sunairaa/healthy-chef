@@ -90,4 +90,9 @@ router.post("/logout", isLoggedIn, (req, res) => {
   res.redirect("/auth/login");
 });
 
+//HOME PAGE
+router.get("/create", (req, res) => {
+  res.render("recipes/recipe-create");
+});
+
 module.exports = router;

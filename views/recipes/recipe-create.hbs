@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <h1 class="text-center">Create recipe</h1>
+
+            <form action="/create" method="POST" enctype="multipart/form-data" class="row g-3">
+                <div class="col-md-12">
+                    <label for="title" class="form-label">Recipe name</label>
+                    <input type="text" name="title" class="form-control" id="inputTitle" required>
+                </div>
+                <div class="col-md-12">
+                    <label for="prepTime" class="form-label">Preparation Time (minutes)</label>
+                    <input type="number" name="prepTime" class="form-control" id="inputPrepTime" required>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="cookTime" class="form-label">Cooking Time (minutes)</label>
+                    <input type="number" name="cookTime" class="form-control" id="inputCookTime" required>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="ingredients" class="form-label">Ingredients</label>
+                    <input type="text" name="ingredients" class="form-control" id="inputIngredients" required>
+                </div>
+                <div class="col-md-12">
+                    <label for="image" class="form-label">Recipe image</label>
+                    <input type="file" name="image" />
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-success">Create</button>
+                </div>
+            </form>
+
+        </div>
+
+        {{!-- <div class="col-12 col-md-6">col-6</div> --}}
+    </div>
+</div>
