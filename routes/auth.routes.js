@@ -81,18 +81,13 @@ router.post("/login", isLoggedOut, async (req, res) => {
 //HOME PAGE
 router.get("/home", isLoggedIn, (req, res) => {
   const { currentUser } = req.session;
-  res.render("home", currentUser);
+  res.render("home", { currentUser });
 });
 
 // LOG OUT
 router.post("/logout", isLoggedIn, (req, res) => {
   req.session.destroy();
   res.redirect("/auth/login");
-});
-
-//HOME PAGE
-router.get("/create", (req, res) => {
-  res.render("recipes/recipe-create");
 });
 
 module.exports = router;
