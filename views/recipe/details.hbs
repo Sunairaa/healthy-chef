@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="row row-cols-1">
+        <div class="col">
+            <h1>{{searchedRecipe.title}}</h1>
+        </div>
+    </div>
+
+    <div class="row row-cols-4">
+        <div class="col">
+            <p>Preparation Time</p>
+            <h3>{{searchedRecipe.prepTime}}</h3>
+        </div>
+        <div class="col">
+            <p>Cooking Time</p>
+            <h3>{{searchedRecipe.cookTime}}</h3>
+        </div>
+        <div class="col">
+            <p>Total Time</p>
+            <h3>{{searchedRecipe.totalTime}} </h3>
+        </div>
+        <div class="col">
+            <p>Serves</p>
+            <h3>{{searchedRecipe.servings}}</h3>
+        </div>
+    </div>
+
+    <div class="row row-cols-2">
+        <div class="col">
+            <h3> Ingredients</h3>
+            {{!-- {{#each searchedRecipe.Ingredients} }
+            <ul>
+                <il>{{this}}</il>
+            </ul>
+            {{/each}} --}}
+        </div>
+
+
+        <div class="col">
+            <img src="{{searchedRecipe.imageUrl}}" alt="{{searchedRecipe.title}}" />
+            <h3> Instructions</h3>
+            <p>{{searchedRecipe.instructions}}</p>
+        </div>
+    </div>
+</div>

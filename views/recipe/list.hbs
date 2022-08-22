@@ -4,12 +4,12 @@
         {{#each allRecipes }}
         <div class="col">
             <div class="card shadow-sm">
-                <img src="../images/recipe1.jpg" alt="">
+                <img src="{{this.imageUrl}}" alt="">
                 <div class="card-body">
                     <h3> {{this.title}}</h3>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                            <a href="/recipe/details/{{this._id}}" class="btn btn-sm btn-outline-secondary">View</a>
                         </div>
                         <small class="text-muted">9 mins</small>
                     </div>

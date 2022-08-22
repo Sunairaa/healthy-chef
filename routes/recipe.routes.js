@@ -27,6 +27,7 @@ router.post("/create", isLoggedIn, fileUploader.single('recipe-cover-image'), as
         cuisine: newRecipeInfo.cuisine,
         prepTime: newRecipeInfo.prepTime,
         cookTime: newRecipeInfo.cookTime,
+        totalTime: Number(cookTime) + Number(prepTime),
         servings: newRecipeInfo.servings,
         instructions: newRecipeInfo.instructions,
         Owner: _id,
@@ -39,6 +40,7 @@ router.post("/create", isLoggedIn, fileUploader.single('recipe-cover-image'), as
         prepTime: newRecipeInfo.prepTime,
         cookTime: newRecipeInfo.cookTime,
         servings: newRecipeInfo.servings,
+        totalTime: Number(cookTime) + Number(prepTime),
         instructions: newRecipeInfo.instructions,
         imageUrl : req.file.path,
         Owner: _id,
@@ -125,6 +127,17 @@ router.get("/list", async (req, res) => {
     const { currentUser } = req.session;
     const allRecipes = await Recipe.find();
     res.render("recipe/list", { allRecipes, currentUser });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.get("/details/:id", async (req, res) => {
+  try {
+    const { currentUser } = req.session;
+    const { id } = req.params;
+    const searchedRecipe = await Recipe.findById(id);
+    res.render("recipe/details", { searchedRecipe, currentUser });
   } catch (err) {
     console.log(err);
   }
