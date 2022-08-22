@@ -101,4 +101,16 @@ router.post("/delete/:id", isLoggedIn, async (req, res) => {
   }
 });
 
+// GET route - for list all recipe
+
+router.get("/list", async (req, res) => {
+  try {
+    const { currentUser } = req.session;
+    const allRecipes = await Recipe.find();
+    res.render("recipe/list", { allRecipes, currentUser });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 module.exports = router;

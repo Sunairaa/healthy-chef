@@ -1,0 +1,21 @@
+<div class="container">
+    <h2 class="text-center my-5">Our Recipes</h2>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {{#each allRecipes }}
+        <div class="col">
+            <div class="card shadow-sm">
+                <img src="../images/recipe1.jpg" alt="">
+                <div class="card-body">
+                    <h3> {{this.title}}</h3>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                        </div>
+                        <small class="text-muted">9 mins</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each }}
+    </div>
+</div>
