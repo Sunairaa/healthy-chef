@@ -19,6 +19,10 @@ const recipeSchema = new Schema(
       type: Number,
       min: 0,
     },
+    totalTime: {
+      type: Number,
+      min: 0,
+    },
     servings: {
       type: Number,
       min: 0,

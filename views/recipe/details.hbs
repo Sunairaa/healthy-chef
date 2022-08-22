@@ -16,7 +16,7 @@
         </div>
         <div class="col">
             <p>Total Time</p>
-            <h3>{{searchedRecipe.prepTime}} + {{searchedRecipe.cookTime}} </h3>
+            <h3>{{searchedRecipe.totalTime}} </h3>
         </div>
         <div class="col">
             <p>Serves</p>
@@ -26,7 +26,7 @@
 
     <div class="row row-cols-2">
         <div class="col">
-
+            <h3> Ingredients</h3>
             {{!-- {{#each searchedRecipe.Ingredients} }
             <ul>
                 <il>{{this}}</il>
@@ -36,7 +36,8 @@
 
 
         <div class="col">
-            <img src="{{searchedRecipe.imageUrl}}" alt="{{searchedRecipe.title}}">
+            <img src="{{searchedRecipe.imageUrl}}" alt="{{searchedRecipe.title}}" />
+            <h3> Instructions</h3>
             <p>{{searchedRecipe.instructions}}</p>
         </div>
     </div>
