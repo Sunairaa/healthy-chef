@@ -11,7 +11,7 @@ module.exports = (app) => {
         maxAge: 1000 * 60 * 60 * 24, // 24h
       },
       store: new MongoStore({
-        mongoUrl: "mongodb://localhost/healthy-chef",
+        mongoUrl: "mongodb://0.0.0.0/healthy-chef",
         ttl: 1000 * 60 * 60 * 24, // 60sec * 60min * 24h => 1 day
       }),
     })

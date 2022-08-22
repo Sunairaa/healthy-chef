@@ -91,27 +91,17 @@ router.get("/home", isLoggedIn, async (req, res) => {
     const { currentUser } = req.session;
     const allRecipes = await Recipe.find().populate("Owner");
     const myRecipesArr = [];
-    //console.log(`currentuser id: ${currentUser._id}`);
-
-    // console.log("allRecipes", allRecipes);
 
     allRecipes.forEach((recipe) => {
       const isOwner = recipe.Owner._id.toString();
       if (isOwner === currentUser._id) {
         myRecipesArr.push(recipe);
 
-        console.log("recipe", myRecipesArr);
+        // console.log("recipe", myRecipesArr);
       }
       
     });
     res.render("home", { myRecipesArr, currentUser });
-    // console.log(`recipes owners id: ${allRecipes.Owner._id.toString()}`);
-
-    // if (currentUser._id === allRecipes.Owner._id.toString()) {
-    //   const myRecipes = await Recipe.findById(allRecipes._id);
-    //   console.log(`My recipe: ${myRecipes}`);
-    //   res.render("home", { myRecipes, currentUser });
-    // }
   } catch (err) {
     console.error(err);
   }
