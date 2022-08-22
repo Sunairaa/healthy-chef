@@ -27,6 +27,7 @@ router.post("/create", isLoggedIn, async (req, res) => {
       cuisine,
       prepTime,
       cookTime,
+      totalTime: Number(cookTime) + Number(prepTime),
       servings,
       instructions,
       Owner: _id,
