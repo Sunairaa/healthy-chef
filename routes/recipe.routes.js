@@ -18,15 +18,8 @@ router.get("/create", isLoggedIn, (req, res) => {
 // POST route - for submit recipe create form
 router.post("/create", isLoggedIn, async (req, res) => {
   try {
-    const {
-      title,
-      cuisine,
-      prepTime,
-      cookTime,
-      servings,
-      instructions,
-      imageUrl,
-    } = req.body;
+    const { title, cuisine, prepTime, cookTime, servings, instructions } =
+      req.body;
     const { _id } = req.session.currentUser;
     console.log(title);
     const newRecipe = await Recipe.create({
@@ -36,7 +29,6 @@ router.post("/create", isLoggedIn, async (req, res) => {
       cookTime,
       servings,
       instructions,
-      imageUrl,
       Owner: _id,
     });
     console.log(`new recipe: ${newRecipe}`);
@@ -108,6 +100,17 @@ router.get("/list", async (req, res) => {
     const { currentUser } = req.session;
     const allRecipes = await Recipe.find();
     res.render("recipe/list", { allRecipes, currentUser });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.get("/details/:id", async (req, res) => {
+  try {
+    const { currentUser } = req.session;
+    const { id } = req.params;
+    const searchedRecipe = await Recipe.findById(id);
+    res.render("recipe/details", { searchedRecipe, currentUser });
   } catch (err) {
     console.log(err);
   }
