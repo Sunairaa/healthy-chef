@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <h1 class="text-center">Create recipe</h1>
+
+            <form action="/recipe/create" method="POST" class="row g-3">
+            
+                <div class="col-md-12">
+                    <label for="inputTitle" class="form-label">Recipe name</label>
+                    <input type="text" name="title" class="form-control" id="inputTitle" required>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="inputCuisine" class="form-label">Cuisine</label>
+                    <input type="text" name="cuisine" class="form-control" id="inputCuisine" required>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="InputPrepTime" class="form-label">Preparation Time (minutes)</label>
+                    <input type="number" name="prepTime" class="form-control" id="inputPrepTime" required>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="inputCookTime" class="form-label">Cooking Time (minutes)</label>
+                    <input type="number" name="cookTime" class="form-control" id="inputCookTime" required>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="inputServing" class="form-label">Servings</label>
+                    <input type="number" name="servings" class="form-control" id="inputServing" required>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="ingredients" class="form-label">Ingredients</label>
+                    <input type="text" name="Ingredients" class="form-control" id="inputIngredients">
+                </div>
+
+                <div class="col-md-12">
+                    <label for="inputInstructions" class="form-label">Instructions</label>
+                    <textarea name="instructions" cols="30" rows="4" class="form-control"> </textarea>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="image" class="form-label">Recipe image</label>
+                    <input type="file" name="imageUrl" class="form-control-file"/>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-success">Create</button>
+                </div>
+            </form>
+
+        </div>
+
+        {{!-- <div class="col-12 col-md-6">col-6</div> --}}
+    </div>
+</div>
