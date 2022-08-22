@@ -102,9 +102,9 @@ router.get("/home", isLoggedIn, async (req, res) => {
 
         console.log("recipe", myRecipesArr);
       }
-      res.render("home", { myRecipesArr, currentUser });
+      
     });
-
+    res.render("home", { myRecipesArr, currentUser });
     // console.log(`recipes owners id: ${allRecipes.Owner._id.toString()}`);
 
     // if (currentUser._id === allRecipes.Owner._id.toString()) {

@@ -27,4 +27,28 @@ router.post("/create", isLoggedIn, async (req, res) => {
     }
 })
 
+// GET route - for update recipe
+router.get("/update/:id", isLoggedIn, async (req, res) => {
+    try{
+        const { id } = req.params;
+        const recipeToUpdate = await Recipe.findById(id)
+            res.render('recipe/update', { recipeToUpdate });
+    }
+    catch(err) {
+        console.error(err)
+    }
+})
+
+// POST route - for submit update form
+router.post("/update/:id", isLoggedIn, async (req, res) => {
+    try{
+        const { id } = req.params;
+        const { title, cuisine, prepTime, cookTime, servings, instructions, imageUrl } = req.body; 
+    }
+    catch(err) {
+        console.error(err)
+    }
+})
+
+// GET route - 
 module.exports = router;
