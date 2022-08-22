@@ -7,7 +7,7 @@ const { Router } = require("express");
 const async = require("hbs/lib/async");
 
 // ********* require fileUploader in order to use it *********
-// const fileUploader = require('../config/cloudinary.config');
+const fileUploader = require('../config/cloudinary.config');
 
 // GET route - for create recipe form
 router.get("/create", isLoggedIn, (req, res) => {
@@ -16,31 +16,39 @@ router.get("/create", isLoggedIn, (req, res) => {
 });
 
 // POST route - for submit recipe create form
-router.post("/create", isLoggedIn, async (req, res) => {
+router.post("/create", isLoggedIn, fileUploader.single('recipe-cover-image'), async (req, res) => {
   try {
-    const {
-      title,
-      cuisine,
-      prepTime,
-      cookTime,
-      servings,
-      instructions,
-      imageUrl,
-    } = req.body;
+    const newRecipeInfo = req.body;
     const { _id } = req.session.currentUser;
-    console.log(title);
-    const newRecipe = await Recipe.create({
-      title,
-      cuisine,
-      prepTime,
-      cookTime,
-      servings,
-      instructions,
-      imageUrl,
-      Owner: _id,
-    });
+    console.log(newRecipeInfo);
+    if(!req.file) {
+      const newRecipe = await Recipe.create({
+        title: newRecipeInfo.title,
+        cuisine: newRecipeInfo.cuisine,
+        prepTime: newRecipeInfo.prepTime,
+        cookTime: newRecipeInfo.cookTime,
+        servings: newRecipeInfo.servings,
+        instructions: newRecipeInfo.instructions,
+        Owner: _id,
+      });
+      res.redirect("/auth/home");
+    } else {
+        const newRecipe = await Recipe.create({
+        title: newRecipeInfo.title,
+        cuisine: newRecipeInfo.cuisine,
+        prepTime: newRecipeInfo.prepTime,
+        cookTime: newRecipeInfo.cookTime,
+        servings: newRecipeInfo.servings,
+        instructions: newRecipeInfo.instructions,
+        imageUrl : req.file.path,
+        Owner: _id,
+      });
+      res.redirect("/auth/home");
+    }
     console.log(`new recipe: ${newRecipe}`);
-    res.redirect("/auth/home");
+    console.log(`file path: ${newRecipe.imageUrl}`);
+    // console.log(req.file.path)
+    
   } catch (err) {
     console.error(err);
   }
@@ -58,7 +66,7 @@ router.get("/update/:id", isLoggedIn, async (req, res) => {
 });
 
 // POST route - for submit update form
-router.post("/update/:id", isLoggedIn, async (req, res) => {
+router.post("/update/:id", isLoggedIn, fileUploader.single('recipe-cover-image'), async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -68,8 +76,17 @@ router.post("/update/:id", isLoggedIn, async (req, res) => {
       cookTime,
       servings,
       instructions,
-      imageUrl,
+      existingImage,
     } = req.body;
+
+    let imageUrl;
+    if (req.file) {
+      imageUrl = req.file.path;
+      console.log(`if: ${imageUrl}`)
+    } else {
+      imageUrl = existingImage;
+      console.log(`else: ${imageUrl}`)
+    }
 
     await Recipe.findByIdAndUpdate(
       id,

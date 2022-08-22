@@ -3,7 +3,7 @@
         <div class="col-12 col-md-6">
             <h1 class="text-center">Update recipe</h1>
 
-            <form action="/recipe/update/{{recipeToUpdate._id}}" method="POST" class="row g-3">
+            <form action="/recipe/update/{{recipeToUpdate._id}}" enctype="multipart/form-data" method="POST" class="row g-3">
 
                 <div class="col-md-12">
                     <label for="inputTitle" class="form-label">Recipe name</label>
@@ -49,7 +49,8 @@
 
                 <div class="col-md-12">
                     <label for="image" class="form-label">Recipe image</label>
-                    <input type="file" name="imageUrl" class="form-control-file" value={{recipeToUpdate.imageUrl}} />
+                    <input type="file" name="recipe-cover-image" class="form-control-file" value={{recipeToUpdate.imageUrl}} />
+                    <input type="text" name="existingImage" value="{{recipeToUpdate.imageUrl}}">
                 </div>
 
                 <div class="col-12">
