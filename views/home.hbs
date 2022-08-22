@@ -11,19 +11,28 @@
     </div>
 </div>
 
+
+
+
 <div class="container">
+
+
     <h2 class="text-center my-5">My Recipes</h2>
+
+    {{#each myRecipesArr }}
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         <div class="col">
             <div class="card shadow-sm">
-                <img src="../images/recipe1.jpg" alt="">
+                <img src="{{this.imageUrl}}" alt="">
                 <div class="card-body">
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
+                    <h3>{{this.title}}</h3>
+                    <p class="card-text">{{this.instructions}}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                            <a href="/recipe/{{this._id}}" type="button"
+                                class="btn btn-sm btn-outline-secondary">View</a>
+                            <a href="/recipe/update/{{this._id}}" type="button"
+                                class="btn btn-sm btn-outline-secondary">Edit</a>
                         </div>
                         <small class="text-muted">9 mins</small>
                     </div>
@@ -31,40 +40,9 @@
             </div>
         </div>
 
-        <div class="col">
-            <div class="card shadow-sm">
-                <img src="../images/recipe1.jpg" alt="">
-                <div class="card-body">
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
-                        </div>
-                        <small class="text-muted">9 mins</small>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="col">
-            <div class="card shadow-sm">
-                <img src="../images/recipe1.jpg" alt="">
-                <div class="card-body">
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div>
-                        <small class="text-muted">9 mins</small>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
-</div>
+
+    {{/each}}
 </div>
