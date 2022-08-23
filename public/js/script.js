@@ -33,13 +33,17 @@ ingredients.addEventListener("input", async () => {
   }
 });
 
-ingredients.addEventListener("keypress", (e) => {
+// option.addEventListener('click', () => {
+//   addIngredient(apiResponse);
+// })
+
+ingredients.addEventListener('keypress', (e) => {
   if (e.keyCode === 13) {
-    showIngredientsInputs(apiResponse);
+    addIngredient(apiResponse);
   }
 });
 
-function showIngredientsInputs(apiResponse) {
+function addIngredient(apiResponse) {
   // console.log(apiResponse);
   //create Div for each ingredient and append to parent div
   const ingredientsDataDiv = document.createElement("div");
@@ -62,19 +66,17 @@ function showIngredientsInputs(apiResponse) {
   inputIngredientId.setAttribute("value", apiResponse[0].fdcId);
   ingredientsDataDiv.appendChild(inputIngredientId);
 
-  const deletebtn = document.createElement("button");
-  deletebtn.setAttribute("type", "submit");
-  deletebtn.setAttribute("class", "deleteIngredientBtn");
-  deletebtn.textContent = "-";
-  ingredientsDataDiv.appendChild(deletebtn);
+  const deleteBtn = document.createElement("button");
+  deleteBtn.setAttribute("type", "button");
+  deleteBtn.setAttribute("class", "deleteIngredientBtn");
+  deleteBtn.textContent = "-";
+  ingredientsDataDiv.appendChild(deleteBtn);
+
+  handleDelete(deleteBtn);
 }
 
-console.log(deleteBtns);
-
-function handleDelete() {
-  deleteBtns.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      btn.parentElement.remove();
-    });
+function handleDelete(deleteBtn) {
+  deleteBtn.addEventListener("click", () => {
+    deleteBtn.parentElement.remove();
   });
 }
