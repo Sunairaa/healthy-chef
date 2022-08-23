@@ -3,8 +3,8 @@
         <div class="col-12 col-md-6">
             <h1 class="text-center">Create recipe</h1>
 
-            <form action="/recipe/create" method="POST" enctype="multipart/form-data" class="row g-3">
-            
+            <form action="/recipe/create" method="POST" id="form" enctype="multipart/form-data" class="row g-3">
+
                 <div class="col-md-12">
                     <label for="inputTitle" class="form-label">Recipe name</label>
                     <input type="text" name="title" class="form-control" id="inputTitle" required>
@@ -33,10 +33,16 @@
                 <div class="col-md-12">
                     {{!-- <label for="ingredients" class="form-label">Ingredients</label>
                     <input type="text" name="Ingredients" class="form-control" id="inputIngredients"> --}}
-                
-
                     <label for="inputIngredients" class="form-label">Ingredients</label>
-                    <input class="form-control" list="datalistOptions" name="Ingredients" id="inputIngredients" placeholder="Search for ingredients...">
+                    <div class="input-group">
+                        
+                        <input class="form-control" list="datalistOptions" name="Ingredients" id="inputIngredients"
+                        placeholder="Search for ingredients...">
+                        <input type="button" class="input-group-text" id="add-ingredient-btn" value="+">
+                    </div>
+                    
+                    {{!-- <input class="form-control" list="datalistOptions" name="Ingredients" id="inputIngredients"
+                        placeholder="Search for ingredients..."> --}}
                     <datalist id="datalistOptions">
                         {{!-- <option value="San Francisco">
                         <option value="New York">
@@ -46,6 +52,11 @@
                     </datalist>
                 </div>
 
+                <ul class="col-md-12" id="ingredientsData">
+
+
+                </ul>
+
                 <div class="col-md-12">
                     <label for="inputInstructions" class="form-label">Instructions</label>
                     <textarea name="instructions" cols="30" rows="4" class="form-control"> </textarea>
@@ -53,7 +64,7 @@
 
                 <div class="col-md-12">
                     <label for="image" class="form-label">Recipe image</label>
-                    <input type="file" name="recipe-cover-image" value="{{imageUrl}}" class="form-control-file"/>
+                    <input type="file" name="recipe-cover-image" value="{{imageUrl}}" class="form-control-file" />
                 </div>
 
                 <div class="col-12">
@@ -62,7 +73,7 @@
             </form>
 
         </div>
-        
+
         {{!-- <div class="col-12 col-md-6">col-6</div> --}}
     </div>
 </div>
