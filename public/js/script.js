@@ -9,8 +9,11 @@ const apiKey = "6htf03n46hsW3piW88qt8gDIpAha0ewMtWfshMqC";
 const ingredients = document.getElementById("inputIngredients");
 const ingredientsList = document.getElementById("datalistOptions");
 const ingredientsData = document.getElementById("ingredientsData");
+
 let option;
 let apiResponse;
+let deleteBtns = document.querySelectorAll(".deleteIngredientBtn");
+
 ingredients.addEventListener("input", async () => {
   try {
     const response = await axios.get(
@@ -18,7 +21,7 @@ ingredients.addEventListener("input", async () => {
     );
     apiResponse = response.data.foods;
     ingredientsList.innerHTML = "";
-    console.log("Response from API is: ", response.data.foods);
+    //console.log("Response from API is: ", response.data.foods);
     for (let i = 0; i < response.data.foods.length; i++) {
       option = document.createElement("option");
       option.setAttribute("value", response.data.foods[i].fdcId);
@@ -32,13 +35,12 @@ ingredients.addEventListener("input", async () => {
 
 ingredients.addEventListener("keypress", (e) => {
   if (e.keyCode === 13) {
-    console.log("enter");
     showIngredientsInputs(apiResponse);
   }
 });
 
 function showIngredientsInputs(apiResponse) {
-  console.log(apiResponse);
+  // console.log(apiResponse);
   //create Div for each ingredient and append to parent div
   const ingredientsDataDiv = document.createElement("div");
   ingredientsData.appendChild(ingredientsDataDiv);
@@ -56,12 +58,23 @@ function showIngredientsInputs(apiResponse) {
 
   //create hiden input to retrieve id
   const inputIngredientId = document.createElement("input");
-  // inputIngredientId.setAttribute("hidden");
+  inputIngredientId.setAttribute("hidden", true);
   inputIngredientId.setAttribute("value", apiResponse[0].fdcId);
   ingredientsDataDiv.appendChild(inputIngredientId);
 
   const deletebtn = document.createElement("button");
   deletebtn.setAttribute("type", "submit");
+  deletebtn.setAttribute("class", "deleteIngredientBtn");
   deletebtn.textContent = "-";
   ingredientsDataDiv.appendChild(deletebtn);
+}
+
+console.log(deleteBtns);
+
+function handleDelete() {
+  deleteBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      btn.parentElement.remove();
+    });
+  });
 }
