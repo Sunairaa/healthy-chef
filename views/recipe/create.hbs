@@ -31,8 +31,19 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label for="ingredients" class="form-label">Ingredients</label>
-                    <input type="text" name="Ingredients" class="form-control" id="inputIngredients">
+                    {{!-- <label for="ingredients" class="form-label">Ingredients</label>
+                    <input type="text" name="Ingredients" class="form-control" id="inputIngredients"> --}}
+                
+
+                    <label for="inputIngredients" class="form-label">Ingredients</label>
+                    <input class="form-control" list="datalistOptions" name="Ingredients" id="inputIngredients" placeholder="Search for ingredients...">
+                    <datalist id="datalistOptions">
+                        {{!-- <option value="San Francisco">
+                        <option value="New York">
+                        <option value="Seattle">
+                        <option value="Los Angeles">
+                        <option value="Chicago"> --}}
+                    </datalist>
                 </div>
 
                 <div class="col-md-12">
@@ -51,7 +62,7 @@
             </form>
 
         </div>
-
+        
         {{!-- <div class="col-12 col-md-6">col-6</div> --}}
     </div>
 </div>
