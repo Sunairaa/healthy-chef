@@ -38,11 +38,10 @@
                <li class="nav-item dropdown">
                   <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
                      aria-expanded="false">
-                     <img src="https://i.stack.imgur.com/34AD2.jpg" alt="mdo" width="32" height="32"
-                        class="rounded-circle">
+                     <img src="{{currentUser.imageUrl}}" alt="mdo" width="32" height="32" class="rounded-circle">
                   </a>
                   <ul class="dropdown-menu">
-                     <li><a class="dropdown-item" href="#">Manage my profile</a></li>
+                     <li><a class="dropdown-item" href="/profil">Manage my profile</a></li>
                      <li>
                         <hr class="dropdown-divider">
                      </li>
@@ -57,8 +56,6 @@
          </div>
       </div>
    </nav>
-
-
 
    {{else}}
 

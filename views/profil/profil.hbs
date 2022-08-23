@@ -1,0 +1,40 @@
+<div class="container">
+
+    <h1>My profil</h1>
+    <div class="row row-cols-2">
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                    Basic info </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Full Name: {{currentUser.fullName}}</li>
+                    <li class="list-group-item">Email: {{currentUser.email}}</li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="col">
+
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                    Profil picture</div>
+                <ul class="list-group list-group-flush">
+
+                    <li class="list-group-item"><img src="{{currentUser.imageUrl}}" alt="my profil picture"></li>
+                    <form action="/profil" method="post" enctype="multipart/form-data">
+                        <div class="form-group list-group-item">
+                            <label>Update profil picture:
+                                <input type="file" name="profil-picture" class="form-control-file" />
+                            </label>
+                            <button type="submit" class="btn btn-success">Update</button>
+                        </div>
+
+                </ul>
+            </div>
+
+
+
+        </div>
+
+    </div>
+</div>

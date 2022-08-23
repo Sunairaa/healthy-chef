@@ -19,6 +19,9 @@
 
     <h2 class="text-center my-5">My Recipes</h2>
 
+    {{#unless myRecipesArr}}
+    <p>you don't have any recipe yet. Create new to add some</p>
+    {{else}}
     {{#each myRecipesArr }}
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         <div class="col">
@@ -44,4 +47,6 @@
     </div>
 
     {{/each}}
+
+    {{/unless}}
 </div>
