@@ -6,7 +6,7 @@ const User = require("../models/User.model");
 const Recipe = require("../models/Recipe.model");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
 
-// // SIGNUP
+// SIGNUP
 router.get("/signup", isLoggedOut, (req, res) => {
   res.render("auth/signup");
 });
@@ -71,7 +71,7 @@ router.post("/login", isLoggedOut, async (req, res) => {
       return;
     } else if (bcrypt.compareSync(password, user.password)) {
       req.session.currentUser = user;
-      console.log("user", user);
+      console.log("maxiUser", user);
       res.redirect("/auth/home");
     }
   } catch (err) {
@@ -99,7 +99,6 @@ router.get("/home", isLoggedIn, async (req, res) => {
 
         // console.log("recipe", myRecipesArr);
       }
-      
     });
     res.render("home", { myRecipesArr, currentUser });
   } catch (err) {
