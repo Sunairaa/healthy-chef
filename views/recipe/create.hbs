@@ -3,7 +3,7 @@
         <div class="col-12 col-md-6">
             <h1 class="text-center">Create recipe</h1>
 
-            <form action="/recipe/create" method="POST" enctype="multipart/form-data" class="row g-3">
+            <form action="/recipe/create" method="POST" id="form" enctype="multipart/form-data" class="row g-3">
 
                 <div class="col-md-12">
                     <label for="inputTitle" class="form-label">Recipe name</label>
@@ -33,11 +33,16 @@
                 <div class="col-md-12">
                     {{!-- <label for="ingredients" class="form-label">Ingredients</label>
                     <input type="text" name="Ingredients" class="form-control" id="inputIngredients"> --}}
-
-
                     <label for="inputIngredients" class="form-label">Ingredients</label>
-                    <input class="form-control" list="datalistOptions" name="Ingredients" id="inputIngredients"
+                    <div class="input-group">
+                        
+                        <input class="form-control" list="datalistOptions" name="Ingredients" id="inputIngredients"
                         placeholder="Search for ingredients...">
+                        <input type="button" class="input-group-text" id="add-ingredient-btn" value="+">
+                    </div>
+                    
+                    {{!-- <input class="form-control" list="datalistOptions" name="Ingredients" id="inputIngredients"
+                        placeholder="Search for ingredients..."> --}}
                     <datalist id="datalistOptions">
                         {{!-- <option value="San Francisco">
                         <option value="New York">
@@ -47,10 +52,10 @@
                     </datalist>
                 </div>
 
-                <div class="col-md-12" id="ingredientsData">
+                <ul class="col-md-12" id="ingredientsData">
 
 
-                </div>
+                </ul>
 
                 <div class="col-md-12">
                     <label for="inputInstructions" class="form-label">Instructions</label>
