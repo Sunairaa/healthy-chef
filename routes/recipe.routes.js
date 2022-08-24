@@ -1,15 +1,13 @@
+const capitalized = require("../utils/capitalized");
+//import { capitalized } from "../utils/capitalized.js";
 const router = require("express").Router();
 const User = require("../models/User.model");
 const Recipe = require("../models/Recipe.model");
-
 const RecipeIngredient = require("../models/RecipeIngredient.model");
 const Comment = require("../models/Comment.model");
-
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
 const { Router } = require("express");
 const async = require("hbs/lib/async");
-
-// ********* require fileUploader in order to use it *********
 const fileUploader = require("../config/cloudinary.config");
 
 // GET route - for create recipe form
@@ -58,7 +56,7 @@ router.post(
               Ingredients: ingredientsIds,
               Owner: _id,
             });
-            console.log(`New Recipe: ${newRecipe}`);
+            // console.log(`New Recipe: ${newRecipe}`);
             res.redirect("/auth/home");
           } else {
             const newRecipe = await Recipe.create({
@@ -178,7 +176,7 @@ router.get("/details/:id", async (req, res) => {
     const { id } = req.params;
     
     const searchedRecipe = await Recipe.findById(id)
-      .populate("Owner comments")
+      .populate("Owner comments Ingredients")
       .populate({
         // we are populating author in the previously populated comments
         path: "comments",
@@ -187,6 +185,17 @@ router.get("/details/:id", async (req, res) => {
           model: "User",
         },
       });
+    console.log("searchedRecipe", searchedRecipe);
+
+    // const capitalizedIngredientName = searchedRecipe.Ingredients.map(
+    //   (ingredient) => {
+    //     const ingredientName = ingredient.name;
+    //     capitalized(ingredientName);
+    //   }
+    // );
+
+    // console.log("capitalizedIngredientName", capitalizedIngredientName);
+
     res.render("recipe/details", { searchedRecipe, currentUser });
   } catch (err) {
     console.log(err);
