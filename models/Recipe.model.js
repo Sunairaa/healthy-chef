@@ -33,7 +33,7 @@ const recipeSchema = new Schema(
     Ingredients: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Recipe_Ingredient",
+        ref: "RecipeIngredient",
       },
     ],
     imageUrl: {
