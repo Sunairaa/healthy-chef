@@ -87,7 +87,7 @@ router.post(
       console.error(err);
     }
   }
-});
+);
 
 // GET route - for update recipe
 router.get("/update/:id", isLoggedIn, async (req, res) => {
@@ -176,6 +176,7 @@ router.get("/details/:id", async (req, res) => {
   try {
     const { currentUser } = req.session;
     const { id } = req.params;
+    
     const searchedRecipe = await Recipe.findById(id)
       .populate("Owner comments")
       .populate({
