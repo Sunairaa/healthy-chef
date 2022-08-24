@@ -1,7 +1,10 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
 const Recipe = require("../models/Recipe.model");
+
 const RecipeIngredient = require("../models/RecipeIngredient.model");
+const Comment = require("../models/Comment.model");
+
 
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
 const { Router } = require("express");
@@ -9,7 +12,7 @@ const async = require("hbs/lib/async");
 
 // ********* require fileUploader in order to use it *********
 const fileUploader = require('../config/cloudinary.config');
-const { populate } = require("../models/User.model");
+
 
 // GET route - for create recipe form
 router.get("/create", isLoggedIn, (req, res) => {
@@ -79,60 +82,67 @@ router.post("/create", isLoggedIn, fileUploader.single('recipe-cover-image'), as
   } catch (err) {
     console.error(err);
   }
-});
+);
 
 // GET route - for update recipe
 router.get("/update/:id", isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
+    const { currentUser } = req.session;
+    console.log(currentUser);
     const recipeToUpdate = await Recipe.findById(id);
-    res.render("recipe/update", { recipeToUpdate });
+    res.render("recipe/update", { recipeToUpdate, currentUser });
   } catch (err) {
     console.error(err);
   }
 });
 
 // POST route - for submit update form
-router.post("/update/:id", isLoggedIn, fileUploader.single('recipe-cover-image'), async (req, res) => {
-  try {
-    const { id } = req.params;
-    const {
-      title,
-      cuisine,
-      prepTime,
-      cookTime,
-      servings,
-      instructions,
-      existingImage,
-    } = req.body;
-
-    let imageUrl;
-    if (req.file) {
-      imageUrl = req.file.path;
-      console.log(`if: ${imageUrl}`)
-    } else {
-      imageUrl = existingImage;
-      console.log(`else: ${imageUrl}`)
-    }
-
-    await Recipe.findByIdAndUpdate(
-      id,
-      {
+router.post(
+  "/update/:id",
+  isLoggedIn,
+  fileUploader.single("recipe-cover-image"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const {
         title,
         cuisine,
         prepTime,
         cookTime,
         servings,
         instructions,
-        imageUrl,
-      },
-      { new: true }
-    );
-    res.redirect("/auth/home");
-  } catch (err) {
-    console.error(err);
+        existingImage,
+      } = req.body;
+
+      let imageUrl;
+      if (req.file) {
+        imageUrl = req.file.path;
+        console.log(`if: ${imageUrl}`);
+      } else {
+        imageUrl = existingImage;
+        console.log(`else: ${imageUrl}`);
+      }
+
+      await Recipe.findByIdAndUpdate(
+        id,
+        {
+          title,
+          cuisine,
+          prepTime,
+          cookTime,
+          servings,
+          instructions,
+          imageUrl,
+        },
+        { new: true }
+      );
+      res.redirect("/auth/home");
+    } catch (err) {
+      console.error(err);
+    }
   }
-});
+);
 
 // POST route - for delete recipe
 router.post("/delete/:id", isLoggedIn, async (req, res) => {
@@ -161,9 +171,16 @@ router.get("/details/:id", async (req, res) => {
   try {
     const { currentUser } = req.session;
     const { id } = req.params;
-    const searchedRecipe = await Recipe.findById(id);
-    // Recipe.populate('Ingredients')
-    console.log("Searched Recipe: " + searchedRecipe)
+    const searchedRecipe = await Recipe.findById(id)
+      .populate("Owner comments")
+      .populate({
+        // we are populating author in the previously populated comments
+        path: "comments",
+        populate: {
+          path: "author",
+          model: "User",
+        },
+      });
     res.render("recipe/details", { searchedRecipe, currentUser });
   } catch (err) {
     console.log(err);

@@ -6,7 +6,7 @@
             nisi vitae suscipit tellus mauris. Aliquet nibh praesent tristique magna sit amet purus. </p>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
             <a type="button" href="/recipe/create" class="btn btn-success btn-lg px-4 gap-3">Create Recipe</a>
-            <a type="button" href="#" class="btn btn-outline-success btn-lg px-4">Check our Recipes</a>
+            <a type="button" href="/recipe/list" class="btn btn-outline-success btn-lg px-4">Check our Recipes</a>
         </div>
     </div>
 </div>
@@ -36,7 +36,7 @@
                             <form method="POST" action="/recipe/delete/{{this._id}}"><button
                                     class="btn btn-sm btn-outline-secondary" type="submit">Delete</button></form>
                         </div>
-                        <small class="text-muted">9 mins</small>
+                        <small class="text-muted">{{this.totalTime}} mins</small>
                     </div>
                 </div>
             </div>
