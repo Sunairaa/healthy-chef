@@ -82,7 +82,7 @@ router.post("/create", isLoggedIn, fileUploader.single('recipe-cover-image'), as
   } catch (err) {
     console.error(err);
   }
-);
+});
 
 // GET route - for update recipe
 router.get("/update/:id", isLoggedIn, async (req, res) => {
