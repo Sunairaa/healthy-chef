@@ -108,8 +108,10 @@ router.get("/home", isLoggedIn, async (req, res) => {
 
 // LOG OUT
 router.post("/logout", isLoggedIn, (req, res) => {
-  req.session.destroy();
-  res.redirect("/auth/login");
+  res.clearCookie("connect.sid");
+  req.session.destroy(() => {
+    res.redirect("/auth/login");
+  });
 });
 
 module.exports = router;

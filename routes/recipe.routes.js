@@ -5,82 +5,87 @@ const Recipe = require("../models/Recipe.model");
 const RecipeIngredient = require("../models/RecipeIngredient.model");
 const Comment = require("../models/Comment.model");
 
-
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
 const { Router } = require("express");
 const async = require("hbs/lib/async");
 
 // ********* require fileUploader in order to use it *********
-const fileUploader = require('../config/cloudinary.config');
-
+const fileUploader = require("../config/cloudinary.config");
 
 // GET route - for create recipe form
 router.get("/create", isLoggedIn, (req, res) => {
   //  const loggedInNavigation = true;
-  res.render("recipe/create");
+  const { currentUser } = req.session;
+  res.render("recipe/create", { currentUser });
 });
 
 // POST route - for submit recipe create form
-router.post("/create", isLoggedIn, fileUploader.single('recipe-cover-image'), async (req, res) => {
-  try {
-    const newRecipeInfo = req.body;
-    const { _id } = req.session.currentUser;
-    const { Ingredients } = req.body;
-    const ingredientsObjs = JSON.parse(Ingredients);
-    console.log(ingredientsObjs);
-    // const ingredientsIds = ingredientsObjs.map(ingredient => {return {id: ingredient.id}})
-    // console.log(`Ingredients ID ${ingredientsIds}`)
-    // const createdIngredients = []
-    // if ingredients is already in the db then don't create
-    // else create
-    // ingredientsObjs.forEach((ingredient) => {
-    //   return RecipeIngredient.create(ingredient)
-    // });
-    RecipeIngredient.create(ingredientsObjs)
-      .then((result) => {
-        console.log(result)
-        return result.map(ingredient => ingredient._id)
-      })
-      .then(async (ingredientsIds) => {
-        if(!req.file) {
-          const newRecipe = await Recipe.create({
-            title: newRecipeInfo.title,
-            cuisine: newRecipeInfo.cuisine,
-            prepTime: newRecipeInfo.prepTime,
-            cookTime: newRecipeInfo.cookTime,
-            totalTime: Number(newRecipeInfo.cookTime) + Number(newRecipeInfo.prepTime),
-            servings: newRecipeInfo.servings,
-            instructions: newRecipeInfo.instructions,
-            Ingredients: ingredientsIds,
-            Owner: _id,
-          });
-          console.log(`New Recipe: ${newRecipe}`)
-          res.redirect("/auth/home");
-        } else {
+router.post(
+  "/create",
+  isLoggedIn,
+  fileUploader.single("recipe-cover-image"),
+  async (req, res) => {
+    try {
+      const newRecipeInfo = req.body;
+      const { _id } = req.session.currentUser;
+      const { Ingredients } = req.body;
+      const ingredientsObjs = JSON.parse(Ingredients);
+      console.log(ingredientsObjs);
+      // const ingredientsIds = ingredientsObjs.map(ingredient => {return {id: ingredient.id}})
+      // console.log(`Ingredients ID ${ingredientsIds}`)
+      // const createdIngredients = []
+      // if ingredients is already in the db then don't create
+      // else create
+      // ingredientsObjs.forEach((ingredient) => {
+      //   return RecipeIngredient.create(ingredient)
+      // });
+      RecipeIngredient.create(ingredientsObjs)
+        .then((result) => {
+          console.log(result);
+          return result.map((ingredient) => ingredient._id);
+        })
+        .then(async (ingredientsIds) => {
+          if (!req.file) {
             const newRecipe = await Recipe.create({
-            title: newRecipeInfo.title,
-            cuisine: newRecipeInfo.cuisine,
-            prepTime: newRecipeInfo.prepTime,
-            cookTime: newRecipeInfo.cookTime,
-            servings: newRecipeInfo.servings,
-            totalTime: Number(newRecipeInfo.cookTime) + Number(newRecipeInfo.prepTime),
-            instructions: newRecipeInfo.instructions,
-            imageUrl : req.file.path,
-            Ingredients : ingredientsIds,
-            Owner: _id,
-          });
-          res.redirect("/auth/home");
-        }
-      })
+              title: newRecipeInfo.title,
+              cuisine: newRecipeInfo.cuisine,
+              prepTime: newRecipeInfo.prepTime,
+              cookTime: newRecipeInfo.cookTime,
+              totalTime:
+                Number(newRecipeInfo.cookTime) + Number(newRecipeInfo.prepTime),
+              servings: newRecipeInfo.servings,
+              instructions: newRecipeInfo.instructions,
+              Ingredients: ingredientsIds,
+              Owner: _id,
+            });
+            console.log(`New Recipe: ${newRecipe}`);
+            res.redirect("/auth/home");
+          } else {
+            const newRecipe = await Recipe.create({
+              title: newRecipeInfo.title,
+              cuisine: newRecipeInfo.cuisine,
+              prepTime: newRecipeInfo.prepTime,
+              cookTime: newRecipeInfo.cookTime,
+              servings: newRecipeInfo.servings,
+              totalTime:
+                Number(newRecipeInfo.cookTime) + Number(newRecipeInfo.prepTime),
+              instructions: newRecipeInfo.instructions,
+              imageUrl: req.file.path,
+              Ingredients: ingredientsIds,
+              Owner: _id,
+            });
+            res.redirect("/auth/home");
+          }
+        });
 
-    // console.log(createdIngredients);
-    
-    // console.log(`new recipe: ${newRecipe}`);
-    // console.log(`file path: ${newRecipe.imageUrl}`);
-    // console.log(req.file.path)
-    
-  } catch (err) {
-    console.error(err);
+      // console.log(createdIngredients);
+
+      // console.log(`new recipe: ${newRecipe}`);
+      // console.log(`file path: ${newRecipe.imageUrl}`);
+      // console.log(req.file.path)
+    } catch (err) {
+      console.error(err);
+    }
   }
 );
 
