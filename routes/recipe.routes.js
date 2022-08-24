@@ -187,7 +187,7 @@ router.get("/details/:id", async (req, res) => {
           model: "User",
         },
       });
-    
+      
     let ingredientIdsString = "";
     for (let i = 0; i < searchedRecipe.Ingredients.length; i++) {
       ingredientIdsString += searchedRecipe.Ingredients[i].id + ",";
