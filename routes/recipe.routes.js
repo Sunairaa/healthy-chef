@@ -86,8 +86,8 @@ router.post(
     } catch (err) {
       console.error(err);
     }
-  }
-});
+}
+);
 
 // GET route - for update recipe
 router.get("/update/:id", isLoggedIn, async (req, res) => {
