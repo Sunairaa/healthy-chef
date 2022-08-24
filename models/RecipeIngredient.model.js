@@ -5,6 +5,9 @@ const recipeIngredientSchema = new Schema(
     id: {
         type: String
     },
+    name: {
+        type: String
+    },
     quantity: {
         type: String,
         min: 1

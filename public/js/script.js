@@ -27,7 +27,7 @@ ingredients.addEventListener("input", async () => {
     ingredientsList.innerHTML = "";
     for (let i = 0; i < response.data.foods.length; i++) {
       option = document.createElement("option");
-      option.setAttribute("value", response.data.foods[i].description);
+      option.setAttribute("value", response.data.foods[i].lowercaseDescription);
       ingredientsList.appendChild(option);
     }
   } catch (err) {
@@ -49,7 +49,7 @@ function addIngredient(apiResponse) {
 
   //create input for selected name
   const inputIngredientName = document.createElement("input");
-  inputIngredientName.setAttribute("value", apiResponse[0].description);
+  inputIngredientName.setAttribute("value", apiResponse[0].lowercaseDescription);
   ingredientsDataItem.appendChild(inputIngredientName);
 
   //create input for user to select quantity
@@ -95,9 +95,11 @@ createRecipeBtn.addEventListener('click', () => {
 
   items.forEach((item) => {
     let id = item.childNodes[2].value;
+    let name = item.childNodes[0].value;
     let quantity = item.childNodes[1].value;
     const itemObj = {
       "id": id,
+      "name": name,
       "quantity": quantity
     }
     itemsArray.push(itemObj)
