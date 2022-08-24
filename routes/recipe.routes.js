@@ -67,8 +67,10 @@ router.post(
 router.get("/update/:id", isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
+    const { currentUser } = req.session;
+    console.log(currentUser);
     const recipeToUpdate = await Recipe.findById(id);
-    res.render("recipe/update", { recipeToUpdate });
+    res.render("recipe/update", { recipeToUpdate, currentUser });
   } catch (err) {
     console.error(err);
   }
