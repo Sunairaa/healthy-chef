@@ -160,7 +160,7 @@ router.get("/details/:id", async (req, res) => {
         },
       });
 
-    console.log(searchedRecipe);
+    console.log(searchedRecipe, currentUser);
 
     res.render("recipe/details", { searchedRecipe, currentUser });
   } catch (err) {
