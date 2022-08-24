@@ -1,4 +1,5 @@
 const capitalized = require("../utils/capitalized");
+const axios = require("axios"); // make calls to external APIs
 //import { capitalized } from "../utils/capitalized.js";
 const router = require("express").Router();
 const User = require("../models/User.model");
@@ -28,7 +29,7 @@ router.post(
       const { _id } = req.session.currentUser;
       const { Ingredients } = req.body;
       const ingredientsObjs = JSON.parse(Ingredients);
-      console.log(ingredientsObjs);
+      // console.log(ingredientsObjs);
       // const ingredientsIds = ingredientsObjs.map(ingredient => {return {id: ingredient.id}})
       // console.log(`Ingredients ID ${ingredientsIds}`)
       // const createdIngredients = []
@@ -39,7 +40,7 @@ router.post(
       // });
       RecipeIngredient.create(ingredientsObjs)
         .then((result) => {
-          console.log(result);
+          // console.log(result);
           return result.map((ingredient) => ingredient._id);
         })
         .then(async (ingredientsIds) => {
@@ -92,7 +93,7 @@ router.get("/update/:id", isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
     const { currentUser } = req.session;
-    console.log(currentUser);
+    // console.log(currentUser);
     const recipeToUpdate = await Recipe.findById(id);
     res.render("recipe/update", { recipeToUpdate, currentUser });
   } catch (err) {
@@ -121,10 +122,10 @@ router.post(
       let imageUrl;
       if (req.file) {
         imageUrl = req.file.path;
-        console.log(`if: ${imageUrl}`);
+        // console.log(`if: ${imageUrl}`);
       } else {
         imageUrl = existingImage;
-        console.log(`else: ${imageUrl}`);
+        // console.log(`else: ${imageUrl}`);
       }
 
       await Recipe.findByIdAndUpdate(
@@ -170,6 +171,7 @@ router.get("/list", async (req, res) => {
   }
 });
 
+
 router.get("/details/:id", async (req, res) => {
   try {
     const { currentUser } = req.session;
@@ -185,21 +187,106 @@ router.get("/details/:id", async (req, res) => {
           model: "User",
         },
       });
-    console.log("searchedRecipe", searchedRecipe);
+    
+    let ingredientIdsString = "";
+    for (let i = 0; i < searchedRecipe.Ingredients.length; i++) {
+      ingredientIdsString += searchedRecipe.Ingredients[i].id + ",";
+    }
+    
+    const recipeNutrient = {
+      servings: searchedRecipe.servings,
+      calories: 0,
+      totalFat: {
+        saturatedFat: 0,
+        transFat: 0
+      },
+      cholesterol: 0,
+      sodium: 0,
+      totalCarbohydrate: {
+        dietaryFiber: 0,
+        sugars: 0
+      },
+      protein: 0,
+    };
 
-    // const capitalizedIngredientName = searchedRecipe.Ingredients.map(
-    //   (ingredient) => {
-    //     const ingredientName = ingredient.name;
-    //     capitalized(ingredientName);
-    //   }
-    // );
-
-    // console.log("capitalizedIngredientName", capitalizedIngredientName);
-
-    res.render("recipe/details", { searchedRecipe, currentUser });
+    getIngredientsData(ingredientIdsString)
+    .then(ingredientsResponse => {
+      for (let i = 0; i < ingredientsResponse.length; i++) {
+        let ingredientElement = ingredientsResponse[i];
+        let ingredientServingSize = ingredientElement.servingSize;
+        let ingredientQuantity = searchedRecipe.Ingredients[i].quantity;
+        if (ingredientServingSize === undefined) {
+          ingredientServingSize = 1;
+        }
+        console.log(ingredientElement)
+        let foodNutrients = ingredientElement.foodNutrients
+        for (let j = 0; j < foodNutrients.length; j++) {
+          let foodNutrient = foodNutrients[j];
+          // let nutrientName = foodNutrient.nutrient.name.toLowerCase();
+          // console.log(foodNutrient.nutrient.name.toLowerCase());
+          switch(foodNutrient.nutrient.name) {
+            case "Energy": 
+              recipeNutrient.calories += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount);
+              break;
+            case "Fatty acids, total saturated": 
+              recipeNutrient.totalFat.saturatedFat += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount); 
+              break;
+            case "Fatty acids, total trans": 
+              recipeNutrient.totalFat.transFat += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount); 
+              break;
+            case "Cholesterol": 
+              recipeNutrient.cholesterol += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount); 
+              break;
+            case "Sodium, Na": 
+              recipeNutrient.sodium += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount);
+             break;
+            case "Fiber, total dietary":
+              recipeNutrient.totalCarbohydrate.dietaryFiber += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount);
+              break;
+            case "Sugars, total including NLEA":
+              recipeNutrient.totalCarbohydrate.sugars += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount);
+              break;            
+            case "Protein": 
+              recipeNutrient.protein += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount);
+              break;
+          }
+        }
+      }
+      console.log(recipeNutrient);
+      res.render("recipe/details", { searchedRecipe, recipeNutrient, currentUser });
+    });
+    
+    
   } catch (err) {
     console.log(err);
   }
 });
+
+function calculateNutrientAmount(servingSize, quantity, foodNutrientAmount) {
+  let foodNutrientSingleAmount = foodNutrientAmount / servingSize;
+  return foodNutrientSingleAmount * quantity;
+}
+
+async function getIngredientsData(id) {
+  try {
+     let res = await axios({
+          url: `https://api.nal.usda.gov/fdc/v1/foods?fdcIds=${id}&nutrients=203,208,269,291,307,601,605,606&api_key=6htf03n46hsW3piW88qt8gDIpAha0ewMtWfshMqC`,
+          method: 'get',
+          timeout: 8000,
+          headers: {
+              'Content-Type': 'application/json',
+          }
+      })
+      if(res.status == 200){
+          // test for status you want, etc
+          console.log(res.status)
+      }    
+      // Don't forget to return something   
+      return res.data
+  }
+  catch (err) {
+      console.error(err);
+  }
+}
 
 module.exports = router;
