@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
 const Recipe = require("../models/Recipe.model");
+const RecipeIngredient = require("../models/RecipeIngredient.model");
 
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
 const { Router } = require("express");
@@ -8,6 +9,7 @@ const async = require("hbs/lib/async");
 
 // ********* require fileUploader in order to use it *********
 const fileUploader = require('../config/cloudinary.config');
+const { populate } = require("../models/User.model");
 
 // GET route - for create recipe form
 router.get("/create", isLoggedIn, (req, res) => {
@@ -20,35 +22,58 @@ router.post("/create", isLoggedIn, fileUploader.single('recipe-cover-image'), as
   try {
     const newRecipeInfo = req.body;
     const { _id } = req.session.currentUser;
-    console.log(newRecipeInfo);
-    if(!req.file) {
-      const newRecipe = await Recipe.create({
-        title: newRecipeInfo.title,
-        cuisine: newRecipeInfo.cuisine,
-        prepTime: newRecipeInfo.prepTime,
-        cookTime: newRecipeInfo.cookTime,
-        totalTime: Number(newRecipeInfo.cookTime) + Number(newRecipeInfo.prepTime),
-        servings: newRecipeInfo.servings,
-        instructions: newRecipeInfo.instructions,
-        Owner: _id,
-      });
-      res.redirect("/auth/home");
-    } else {
-        const newRecipe = await Recipe.create({
-        title: newRecipeInfo.title,
-        cuisine: newRecipeInfo.cuisine,
-        prepTime: newRecipeInfo.prepTime,
-        cookTime: newRecipeInfo.cookTime,
-        servings: newRecipeInfo.servings,
-        totalTime: Number(newRecipeInfo.cookTime) + Number(newRecipeInfo.prepTime),
-        instructions: newRecipeInfo.instructions,
-        imageUrl : req.file.path,
-        Owner: _id,
-      });
-      res.redirect("/auth/home");
-    }
-    console.log(`new recipe: ${newRecipe}`);
-    console.log(`file path: ${newRecipe.imageUrl}`);
+    const { Ingredients } = req.body;
+    const ingredientsObjs = JSON.parse(Ingredients);
+    console.log(ingredientsObjs);
+    // const ingredientsIds = ingredientsObjs.map(ingredient => {return {id: ingredient.id}})
+    // console.log(`Ingredients ID ${ingredientsIds}`)
+    // const createdIngredients = []
+    // if ingredients is already in the db then don't create
+    // else create
+    // ingredientsObjs.forEach((ingredient) => {
+    //   return RecipeIngredient.create(ingredient)
+    // });
+    RecipeIngredient.create(ingredientsObjs)
+      .then((result) => {
+        console.log(result)
+        return result.map(ingredient => ingredient._id)
+      })
+      .then(async (ingredientsIds) => {
+        if(!req.file) {
+          const newRecipe = await Recipe.create({
+            title: newRecipeInfo.title,
+            cuisine: newRecipeInfo.cuisine,
+            prepTime: newRecipeInfo.prepTime,
+            cookTime: newRecipeInfo.cookTime,
+            totalTime: Number(newRecipeInfo.cookTime) + Number(newRecipeInfo.prepTime),
+            servings: newRecipeInfo.servings,
+            instructions: newRecipeInfo.instructions,
+            Ingredients: ingredientsIds,
+            Owner: _id,
+          });
+          console.log(`New Recipe: ${newRecipe}`)
+          res.redirect("/auth/home");
+        } else {
+            const newRecipe = await Recipe.create({
+            title: newRecipeInfo.title,
+            cuisine: newRecipeInfo.cuisine,
+            prepTime: newRecipeInfo.prepTime,
+            cookTime: newRecipeInfo.cookTime,
+            servings: newRecipeInfo.servings,
+            totalTime: Number(newRecipeInfo.cookTime) + Number(newRecipeInfo.prepTime),
+            instructions: newRecipeInfo.instructions,
+            imageUrl : req.file.path,
+            Ingredients : ingredientsIds,
+            Owner: _id,
+          });
+          res.redirect("/auth/home");
+        }
+      })
+
+    // console.log(createdIngredients);
+    
+    // console.log(`new recipe: ${newRecipe}`);
+    // console.log(`file path: ${newRecipe.imageUrl}`);
     // console.log(req.file.path)
     
   } catch (err) {
@@ -137,6 +162,8 @@ router.get("/details/:id", async (req, res) => {
     const { currentUser } = req.session;
     const { id } = req.params;
     const searchedRecipe = await Recipe.findById(id);
+    // Recipe.populate('Ingredients')
+    console.log("Searched Recipe: " + searchedRecipe)
     res.render("recipe/details", { searchedRecipe, currentUser });
   } catch (err) {
     console.log(err);
