@@ -186,14 +186,6 @@ router.get("/details/:id", async (req, res) => {
       });
     console.log("searchedRecipe", searchedRecipe);
 
-    // const capitalizedIngredientName = searchedRecipe.Ingredients.map(
-    //   (ingredient) => {
-    //     const ingredientName = ingredient.name;
-    //     capitalized(ingredientName);
-    //   }
-    // );
-
-    // console.log("capitalizedIngredientName", capitalizedIngredientName);
 
     res.render("recipe/details", { searchedRecipe, currentUser });
   } catch (err) {
