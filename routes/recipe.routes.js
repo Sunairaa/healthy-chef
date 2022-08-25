@@ -10,7 +10,7 @@ const fileUploader = require("../config/cloudinary.config");
 
 // GET route - for create recipe form
 router.get("/create", isLoggedIn, async (req, res) => {
-  try{
+  try {
     //  const loggedInNavigation = true;
     const { currentUser } = req.session;
     const ingredients = await Ingredient.find()
@@ -186,12 +186,11 @@ router.get("/list", async (req, res) => {
   }
 });
 
-
 router.get("/details/:id", async (req, res) => {
   try {
     const { currentUser } = req.session;
     const { id } = req.params;
-    
+
     const searchedRecipe = await Recipe.findById(id)
       .populate("Owner comments Ingredients")
       .populate({
@@ -203,25 +202,24 @@ router.get("/details/:id", async (req, res) => {
         },
       });
 
-      
     let ingredientIds = [];
+
     for (let i = 0; i < searchedRecipe.Ingredients.length; i++) {
       ingredientIds.push(searchedRecipe.Ingredients[i].id);
     }
     const ingredients = await Ingredient.find({ 'id': { $in: ingredientIds } });
-
     const recipeNutrient = {
       servings: searchedRecipe.servings,
       calories: 0,
       totalFat: {
         totalFat: 0,
         saturatedFat: 0,
-        transFat: 0
+        transFat: 0,
       },
       totalCarbohydrate: {
         totalCarbohydrate: 0,
         dietaryFiber: 0,
-        sugars: 0
+        sugars: 0,
       },
       protein: 0,
     };
@@ -230,18 +228,54 @@ router.get("/details/:id", async (req, res) => {
       let ingredientQuantity = searchedRecipe.Ingredients[i].quantity;
       let nutrients = ingredients[i].nutrients;
       let servingSize = ingredients[i].servingSize;
-      recipeNutrient.calories += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.calories)
-      recipeNutrient.totalFat.totalFat += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalFat.totalFat);
-      recipeNutrient.totalFat.saturatedFat += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalFat.saturatedFat);
-      recipeNutrient.totalFat.transFat += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalFat.transFat);
-      recipeNutrient.totalCarbohydrate.totalCarbohydrate += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalCarbohydrate.totalCarbohydrate);
-      recipeNutrient.totalCarbohydrate.dietaryFiber += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalCarbohydrate.dietaryFiber);
-      recipeNutrient.totalCarbohydrate.sugars += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalCarbohydrate.sugars);
-      recipeNutrient.protein += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.protein);
-      
+      recipeNutrient.calories += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.calories
+      );
+      recipeNutrient.totalFat.totalFat += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.totalFat.totalFat
+      );
+      recipeNutrient.totalFat.saturatedFat += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.totalFat.saturatedFat
+      );
+      recipeNutrient.totalFat.transFat += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.totalFat.transFat
+      );
+      recipeNutrient.totalCarbohydrate.totalCarbohydrate +=
+        calculateNutrientAmount(
+          servingSize,
+          ingredientQuantity,
+          nutrients.totalCarbohydrate.totalCarbohydrate
+        );
+      recipeNutrient.totalCarbohydrate.dietaryFiber += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.totalCarbohydrate.dietaryFiber
+      );
+      recipeNutrient.totalCarbohydrate.sugars += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.totalCarbohydrate.sugars
+      );
+      recipeNutrient.protein += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.protein
+      );
     }
-    res.render("recipe/details", { searchedRecipe, recipeNutrient, currentUser });
-    
+    console.log(recipeNutrient);
+    res.render("recipe/details", {
+      searchedRecipe,
+      recipeNutrient,
+      currentUser,
+    });
   } catch (err) {
     console.log(err);
   }
@@ -251,6 +285,5 @@ function calculateNutrientAmount(servingSize, quantity, foodNutrientAmount) {
   let foodNutrientSingleAmount = foodNutrientAmount / servingSize;
   return foodNutrientSingleAmount * quantity;
 }
-
 
 module.exports = router;
