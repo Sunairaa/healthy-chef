@@ -11,12 +11,11 @@ const ingredientsList = document.getElementById("datalistOptions");
 const ingredientsData = document.getElementById("ingredientsData");
 const addIngredientBtn = document.getElementById("add-ingredient-btn");
 const createRecipeBtn = document.getElementById("create-recipe-btn");
-
 let option;
-let apiResponse;
 let deleteBtns = document.querySelectorAll(".deleteIngredientBtn");
 const items = [];
 
+addDeleteEventListener();
 ingredients.addEventListener("input", async () => {
   let element_input = document.getElementById('inputIngredients');
   let element_datalist = document.getElementById('datalistOptions');
@@ -71,6 +70,13 @@ function addIngredient(id, title) {
   handleDelete(deleteBtn);
 }
 
+function addDeleteEventListener() {
+  deleteBtns = document.querySelectorAll('.deleteIngredientBtn');
+  deleteBtns.forEach((btn) => {
+     handleDelete(btn)
+  });
+}
+
 function handleDelete(deleteBtn) {
   deleteBtn.addEventListener("click", () => {
     deleteBtn.parentElement.remove();
@@ -79,7 +85,7 @@ function handleDelete(deleteBtn) {
 
 
 // prevent to submit form on enter key press
-document.getElementById("form").onkeypress = function(e) {
+document.getElementById("createForm").onkeypress = function(e) {
   var key = e.charCode || e.keyCode || 0;     
   if (key == 13) {
     e.preventDefault();
@@ -91,6 +97,7 @@ createRecipeBtn.addEventListener('click', () => {
   let itemsArray = []
 
   items.forEach((item) => {
+    let _id = item.childNodes[3].value;
     let id = item.childNodes[2].value;
     let name = item.childNodes[0].value;
     let quantity = item.childNodes[1].value;
@@ -99,11 +106,13 @@ createRecipeBtn.addEventListener('click', () => {
       "name": name,
       "quantity": quantity
     }
+    if(_id != '') {
+      itemObj._id = _id;
+    }
     itemsArray.push(itemObj)
   })
-  console.log(itemsArray)
   let ingredientsInput = document.getElementById("inputIngredientsPair");
   ingredientsInput.value = JSON.stringify(itemsArray);
 
-  document.getElementById("form").submit();
+  document.getElementById("createForm").submit();
 })
