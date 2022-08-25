@@ -1,6 +1,7 @@
 <div class="px-4 py-5 text-center recipe-detail-hero text-light">
     <h1 class="display-5 fw-bold">{{searchedRecipe.title}} </h1>
     <div class="col-lg-6 mx-auto">
+         <p class="lead mb-4"> {{searchedRecipe.cuisine}} </p>
         <p class="lead mb-4">Created by {{searchedRecipe.Owner.fullName}} </p>
     </div>
 </div>
@@ -30,17 +31,19 @@
     <div class="row row-cols-2 p-2">
         <div class="p-4 col-4 d-flex flex-column align-items-center bg-light">
             <img class="img-fluid" src="{{searchedRecipe.imageUrl}}">
-            <h3 class="mt-3 mb-3"> Ingredients</h3>
+            <h3 class="mt-3 mb-3 text-center"> Ingredients (serving or grams)</h3>
             {{#each searchedRecipe.Ingredients}}
             <ul class="list-unstyled mb-1">
-                <li> {{this.name}}</li>
+                <li> {{this.name}}
+                     <span class="text-secondary badge badge-primary badge-pill">{{this.quantity}}</span>
+                </li>
             </ul>
             {{/each}}
         </div>
 
         <div class="col-8">
             <h3 class="mb-3 mt-3 d-flex justify-content-center">Instructions</h3>
-            <p class="p-5">{{searchedRecipe.instructions}}</p>
+            <p class="p-5 recipe-instructions-text">{{searchedRecipe.instructions}}</p>
         </div>
     </div>
 
@@ -125,22 +128,22 @@
 
     {{#if currentUser}}
 
-    <div class="row">
+    <div class="d-flex flex-column justify-content-center align-self-center">
         <h1 class="col-9 mt-5 mb-3 text-center">Comments</h1>
-        <div class="col-8 p-4 d-flex flex-column align-items-center ">
-            {{#if searchedRecipe.comments}}
-            {{#each searchedRecipe.comments}}
-            <div class="comment mt-4 text-justify float-left">
-                <img src="{{this.author.imageUrl}}" alt="" class="rounded-circle" width="40" height="40">
-                <h4>{{this.title}}</h4>
-                <p>{{this.author.fullName}}</p>
-                <span>{{this.date}} </span>
-                <br>
-                <p>{{this.content}}</p>
+        {{#if searchedRecipe.comments}}
+            <div class="col-8 p-4 d-flex flex-column align-items-center ">
+                {{#each searchedRecipe.comments}}
+                <div class="comment mt-4 text-justify float-left">
+                    <img src="{{this.author.imageUrl}}" alt="" class="rounded-circle" width="40" height="40">
+                    <h4>{{this.title}}</h4>
+                    <p>{{this.author.fullName}}</p>
+                    <span>{{this.date}} </span>
+                    <br>
+                    <p>{{this.content}}</p>
+                </div>
+                {{/each}}
             </div>
-            {{/each}}
-            {{/if}}
-        </div>
+        {{/if}}
 
         <div class="col-4 mt-4">
             <form id="algin-form" action="/comment/recipe/{{searchedRecipe._id}}" method="post">

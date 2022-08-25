@@ -22,8 +22,9 @@
     <br>
     <p class="text-center">Lacking inspiration? that's ok. You can also checkout recipes created by others and simply enjoy ;) </p>
     {{else}}
-    {{#each myRecipesArr }}
+   
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+         {{#each myRecipesArr }}
         <div class="col">
             <div class="card shadow-sm">
                 <img src="{{this.imageUrl}}" alt="">
@@ -34,19 +35,14 @@
                             <a href="/recipe/details/{{this._id}}" class="btn btn-sm btn-outline-secondary">View</a>
                             <a href="/recipe/update/{{this._id}}" class="btn btn-sm btn-outline-secondary">Edit</a>
                             <form method="POST" action="/recipe/delete/{{this._id}}"><button
-                                    class="btn btn-sm btn-outline-secondary" type="submit">Delete</button></form>
+                                    class="btn btn-sm btn-outline-secondary" id="deletebtn" type="submit">Delete</button></form>
                         </div>
                         <small class="text-muted">{{this.totalTime}} mins</small>
                     </div>
                 </div>
             </div>
         </div>
-
-
-
-    </div>
-
     {{/each}}
-
+    </div>
     {{/unless}}
 </div>
