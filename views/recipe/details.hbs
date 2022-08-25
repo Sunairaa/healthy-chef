@@ -33,6 +33,17 @@
                 <li> {{this.name}}</li>
             </ul>
             {{/each}}
+            {{#if recipeNutrient}}
+                <p>Serving: {{recipeNutrient.servings}}</p>
+                <p>Calories: {{recipeNutrient.calories}}</p>
+                <p>Saturated Fat: {{recipeNutrient.totalFat.saturatedFat}}</p>
+                <p>Trans Fat: {{recipeNutrient.totalFat.transFat}}</p>
+                <p>Cholestrol: {{recipeNutrient.cholestrol}}</p>
+                <p>Sodium: {{recipeNutrient.sodium}}</p>
+                <p>Dietary Carbs: {{recipeNutrient.totalCarbohydrate.dietaryFiber}}</p>
+                <p>Sugar Carbs: {{recipeNutrient.totalCarbohydrate.sugars}}</p>
+                <p>Protein: {{recipeNutrient.protein}}</p>
+            {{/if}}
         </div>
 
 
