@@ -4,6 +4,7 @@ const axios = require("axios"); // make calls to external APIs
 const router = require("express").Router();
 const User = require("../models/User.model");
 const Recipe = require("../models/Recipe.model");
+const Ingredient = require("../models/Ingredient.model");
 const RecipeIngredient = require("../models/RecipeIngredient.model");
 const Comment = require("../models/Comment.model");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
@@ -11,10 +12,16 @@ const { Router } = require("express");
 const fileUploader = require("../config/cloudinary.config");
 
 // GET route - for create recipe form
-router.get("/create", isLoggedIn, (req, res) => {
-  //  const loggedInNavigation = true;
-  const { currentUser } = req.session;
-  res.render("recipe/create", { currentUser });
+router.get("/create", isLoggedIn, async (req, res) => {
+  try{
+    //  const loggedInNavigation = true;
+    const { currentUser } = req.session;
+    const ingredients = await Ingredient.find()
+    console.log(`IngredientData: ${ingredients}`)
+    res.render("recipe/create", { currentUser, ingredients });
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 // POST route - for submit recipe create form
@@ -28,18 +35,9 @@ router.post(
       const { _id } = req.session.currentUser;
       const { Ingredients } = req.body;
       const ingredientsObjs = JSON.parse(Ingredients);
-      // console.log(ingredientsObjs);
-      // const ingredientsIds = ingredientsObjs.map(ingredient => {return {id: ingredient.id}})
-      // console.log(`Ingredients ID ${ingredientsIds}`)
-      // const createdIngredients = []
-      // if ingredients is already in the db then don't create
-      // else create
-      // ingredientsObjs.forEach((ingredient) => {
-      //   return RecipeIngredient.create(ingredient)
-      // });
+
       RecipeIngredient.create(ingredientsObjs)
         .then((result) => {
-          // console.log(result);
           return result.map((ingredient) => ingredient._id);
         })
         .then(async (ingredientsIds) => {
@@ -56,7 +54,6 @@ router.post(
               Ingredients: ingredientsIds,
               Owner: _id,
             });
-            // console.log(`New Recipe: ${newRecipe}`);
             res.redirect("/auth/home");
           } else {
             const newRecipe = await Recipe.create({
@@ -75,12 +72,6 @@ router.post(
             res.redirect("/auth/home");
           }
         });
-
-      // console.log(createdIngredients);
-
-      // console.log(`new recipe: ${newRecipe}`);
-      // console.log(`file path: ${newRecipe.imageUrl}`);
-      // console.log(req.file.path)
     } catch (err) {
       console.error(err);
     }
@@ -186,110 +177,46 @@ router.get("/details/:id", async (req, res) => {
         },
       });
 
-    let ingredientIdsString = "";
+    let ingredientIds = [];
+    
     for (let i = 0; i < searchedRecipe.Ingredients.length; i++) {
-      ingredientIdsString += searchedRecipe.Ingredients[i].id + ",";
+      ingredientIds.push(searchedRecipe.Ingredients[i].id);
     }
+
+    const ingredients = await Ingredient.find({ 'id': { $in: ingredientIds } });
 
     const recipeNutrient = {
       servings: searchedRecipe.servings,
       calories: 0,
       totalFat: {
+        totalFat: 0,
         saturatedFat: 0,
         transFat: 0,
       },
-      cholesterol: 0,
-      sodium: 0,
       totalCarbohydrate: {
+        totalCarbohydrate: 0,
         dietaryFiber: 0,
         sugars: 0,
       },
       protein: 0,
     };
 
-    getIngredientsData(ingredientIdsString).then((ingredientsResponse) => {
-      for (let i = 0; i < ingredientsResponse.length; i++) {
-        let ingredientElement = ingredientsResponse[i];
-        let ingredientServingSize = ingredientElement.servingSize;
-        let ingredientQuantity = searchedRecipe.Ingredients[i].quantity;
-        if (ingredientServingSize === undefined) {
-          ingredientServingSize = 1;
-        }
-        console.log(ingredientElement);
-        let foodNutrients = ingredientElement.foodNutrients;
-        for (let j = 0; j < foodNutrients.length; j++) {
-          let foodNutrient = foodNutrients[j];
-          // let nutrientName = foodNutrient.nutrient.name.toLowerCase();
-          // console.log(foodNutrient.nutrient.name.toLowerCase());
-          switch (foodNutrient.nutrient.name) {
-            case "Energy":
-              recipeNutrient.calories += calculateNutrientAmount(
-                ingredientServingSize,
-                ingredientQuantity,
-                foodNutrient.amount
-              );
-              break;
-            case "Fatty acids, total saturated":
-              recipeNutrient.totalFat.saturatedFat += calculateNutrientAmount(
-                ingredientServingSize,
-                ingredientQuantity,
-                foodNutrient.amount
-              );
-              break;
-            case "Fatty acids, total trans":
-              recipeNutrient.totalFat.transFat += calculateNutrientAmount(
-                ingredientServingSize,
-                ingredientQuantity,
-                foodNutrient.amount
-              );
-              break;
-            case "Cholesterol":
-              recipeNutrient.cholesterol += calculateNutrientAmount(
-                ingredientServingSize,
-                ingredientQuantity,
-                foodNutrient.amount
-              );
-              break;
-            case "Sodium, Na":
-              recipeNutrient.sodium += calculateNutrientAmount(
-                ingredientServingSize,
-                ingredientQuantity,
-                foodNutrient.amount
-              );
-              break;
-            case "Fiber, total dietary":
-              recipeNutrient.totalCarbohydrate.dietaryFiber +=
-                calculateNutrientAmount(
-                  ingredientServingSize,
-                  ingredientQuantity,
-                  foodNutrient.amount
-                );
-              break;
-            case "Sugars, total including NLEA":
-              recipeNutrient.totalCarbohydrate.sugars +=
-                calculateNutrientAmount(
-                  ingredientServingSize,
-                  ingredientQuantity,
-                  foodNutrient.amount
-                );
-              break;
-            case "Protein":
-              recipeNutrient.protein += calculateNutrientAmount(
-                ingredientServingSize,
-                ingredientQuantity,
-                foodNutrient.amount
-              );
-              break;
-          }
-        }
-      }
-      console.log(recipeNutrient);
-      res.render("recipe/details", {
-        searchedRecipe,
-        recipeNutrient,
-        currentUser,
-      });
-    });
+
+    for (let i = 0; i < ingredients.length; i++) {
+      let ingredientQuantity = searchedRecipe.Ingredients[i].quantity;
+      let nutrients = ingredients[i].nutrients;
+      let servingSize = ingredients[i].servingSize;
+      recipeNutrient.calories += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.calories)
+      recipeNutrient.totalFat.totalFat += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalFat.totalFat);
+      recipeNutrient.totalFat.saturatedFat += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalFat.saturatedFat);
+      recipeNutrient.totalFat.transFat += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalFat.transFat);
+      recipeNutrient.totalCarbohydrate.totalCarbohydrate += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalCarbohydrate.totalCarbohydrate);
+      recipeNutrient.totalCarbohydrate.dietaryFiber += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalCarbohydrate.dietaryFiber);
+      recipeNutrient.totalCarbohydrate.sugars += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalCarbohydrate.sugars);
+      recipeNutrient.protein += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.protein);
+      
+    }
+    res.render("recipe/details", { searchedRecipe, recipeNutrient, currentUser });
   } catch (err) {
     console.log(err);
   }

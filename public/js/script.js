@@ -18,30 +18,27 @@ let deleteBtns = document.querySelectorAll(".deleteIngredientBtn");
 const items = [];
 
 ingredients.addEventListener("input", async () => {
-  try {
-    const response = await axios.get(
-      `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${apiKey}&query=${ingredients.value}&pageSize=1`
-    );
-    apiResponse = response.data.foods;
+  let element_input = document.getElementById('inputIngredients');
+  let element_datalist = document.getElementById('datalistOptions');
+  let opSelected = element_datalist.querySelector(`[value="${element_input.value}"]`);
+  if (opSelected != null) {
     addIngredientBtn.disabled = false;
-    ingredientsList.innerHTML = "";
-    for (let i = 0; i < response.data.foods.length; i++) {
-      option = document.createElement("option");
-      option.setAttribute("value", response.data.foods[i].lowercaseDescription);
-      ingredientsList.appendChild(option);
-    }
-  } catch (err) {
-    console.log(err);
   }
 });
 
 addIngredientBtn.addEventListener('click', () => {
-  addIngredient(apiResponse);
+  let element_input = document.getElementById('inputIngredients');
+  let element_datalist = document.getElementById('datalistOptions');
+  let opSelected = element_datalist.querySelector(`[value="${element_input.value}"]`);
+  let id = opSelected.getAttribute('data-value');
+  let title = opSelected.getAttribute('value');
+
+  addIngredient(id, title);
   ingredients.value = "";
   addIngredientBtn.disabled = true;
 })
 
-function addIngredient(apiResponse) {
+function addIngredient(id, title) {
   //create Div for each ingredient and append to parent div
   const ingredientsDataItem = document.createElement("li");
   ingredientsDataItem.setAttribute("class", "ingredient");
@@ -49,7 +46,7 @@ function addIngredient(apiResponse) {
 
   //create input for selected name
   const inputIngredientName = document.createElement("input");
-  inputIngredientName.setAttribute("value", apiResponse[0].lowercaseDescription);
+  inputIngredientName.setAttribute("value", title);
   ingredientsDataItem.appendChild(inputIngredientName);
 
   //create input for user to select quantity
@@ -62,7 +59,7 @@ function addIngredient(apiResponse) {
   const inputIngredientId = document.createElement("input");
   inputIngredientId.setAttribute("hidden", true);
   inputIngredientId.setAttribute("class", "item_id")
-  inputIngredientId.setAttribute("value", apiResponse[0].fdcId);
+  inputIngredientId.setAttribute("value", id);
   ingredientsDataItem.appendChild(inputIngredientId);
 
   const deleteBtn = document.createElement("button");
