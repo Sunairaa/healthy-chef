@@ -39,7 +39,11 @@
                         <input type="button" class="input-group-text" id="add-ingredient-btn" value="+">
                     </div>
                     
+                    
                     <datalist id="datalistOptions">
+                        {{#each ingredients}}
+                        <option data-value="{{this.id}}" value="{{this.title}}"></option>
+                        {{/each}}
                     </datalist>
                 </div>
 
