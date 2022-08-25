@@ -35,18 +35,9 @@ router.post(
       const { _id } = req.session.currentUser;
       const { Ingredients } = req.body;
       const ingredientsObjs = JSON.parse(Ingredients);
-      // console.log(ingredientsObjs);
-      // const ingredientsIds = ingredientsObjs.map(ingredient => {return {id: ingredient.id}})
-      // console.log(`Ingredients ID ${ingredientsIds}`)
-      // const createdIngredients = []
-      // if ingredients is already in the db then don't create
-      // else create
-      // ingredientsObjs.forEach((ingredient) => {
-      //   return RecipeIngredient.create(ingredient)
-      // });
+
       RecipeIngredient.create(ingredientsObjs)
         .then((result) => {
-          // console.log(result);
           return result.map((ingredient) => ingredient._id);
         })
         .then(async (ingredientsIds) => {
@@ -63,7 +54,6 @@ router.post(
               Ingredients: ingredientsIds,
               Owner: _id,
             });
-            // console.log(`New Recipe: ${newRecipe}`);
             res.redirect("/auth/home");
           } else {
             const newRecipe = await Recipe.create({
@@ -82,12 +72,6 @@ router.post(
             res.redirect("/auth/home");
           }
         });
-
-      // console.log(createdIngredients);
-
-      // console.log(`new recipe: ${newRecipe}`);
-      // console.log(`file path: ${newRecipe.imageUrl}`);
-      // console.log(req.file.path)
     } catch (err) {
       console.error(err);
     }
