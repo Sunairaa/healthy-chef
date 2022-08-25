@@ -3,7 +3,7 @@
         <div class="col-12 col-md-6">
             <h1 class="text-center">Create recipe</h1>
 
-            <form action="/recipe/create" method="POST" id="form" enctype="multipart/form-data" class="row g-3">
+            <form action="/recipe/create" method="POST" id="createForm" enctype="multipart/form-data" class="row g-3">
 
                 <div class="col-md-12">
                     <label for="inputTitle" class="form-label">Recipe name</label>
@@ -33,12 +33,10 @@
                 <div class="col-md-12">
                     <label for="inputIngredients" class="form-label">Ingredients</label>
                     <div class="input-group">
-                        
                         <input class="form-control" list="datalistOptions" name="inputIngredients" id="inputIngredients"
                         placeholder="Search for ingredients...">
                         <input type="button" class="input-group-text" id="add-ingredient-btn" value="+">
                     </div>
-                    
                     
                     <datalist id="datalistOptions">
                         {{#each ingredients}}

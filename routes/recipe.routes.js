@@ -1,6 +1,3 @@
-const capitalized = require("../utils/capitalized");
-const axios = require("axios"); // make calls to external APIs
-//import { capitalized } from "../utils/capitalized.js";
 const router = require("express").Router();
 const User = require("../models/User.model");
 const Recipe = require("../models/Recipe.model");
@@ -17,7 +14,6 @@ router.get("/create", isLoggedIn, async (req, res) => {
     //  const loggedInNavigation = true;
     const { currentUser } = req.session;
     const ingredients = await Ingredient.find()
-    console.log(`IngredientData: ${ingredients}`)
     res.render("recipe/create", { currentUser, ingredients });
   } catch (err) {
     console.error(err);
@@ -85,8 +81,11 @@ router.get("/update/:id", isLoggedIn, async (req, res) => {
     const { currentUser } = req.session;
 
     // console.log(currentUser);
-    const recipeToUpdate = await Recipe.findById(id);
-    res.render("recipe/update", { recipeToUpdate, currentUser });
+    const recipeToUpdate = await Recipe.findById(id)
+      .populate("Ingredients")
+    const ingredients = await Ingredient.find()
+
+    res.render("recipe/update", { recipeToUpdate, ingredients, currentUser });
   } catch (err) {
     console.error(err);
   }
@@ -99,7 +98,32 @@ router.post(
   fileUploader.single("recipe-cover-image"),
   async (req, res) => {
     try {
-      console.log("req.body", req.body);
+      const { Ingredients } = req.body;
+      const ingredientsObjs = JSON.parse(Ingredients);
+      const ingredientsIds = [];
+
+      for (const ingredient of ingredientsObjs) {
+        if (ingredient._id != undefined) {
+          await RecipeIngredient.findByIdAndUpdate(
+            ingredient._id ,
+            {
+              quantity: ingredient.quantity
+            },
+            { new: true }
+          ).then((result) => {
+            ingredientsIds.push(result._id)
+          })
+        } else {
+          await RecipeIngredient.create(
+            ingredient
+          ).then((result) => {
+            ingredientsIds.push(result._id)
+          })
+        }
+      }
+
+      console.log(ingredientsIds)
+
       const { id } = req.params;
       const {
         title,
@@ -114,27 +138,26 @@ router.post(
       let imageUrl;
       if (req.file) {
         imageUrl = req.file.path;
-
       } else {
         imageUrl = existingImage;
-
       }
 
       await Recipe.findByIdAndUpdate(
-        id,
-        {
-          title,
-          cuisine,
-          prepTime,
-          cookTime,
-          servings,
-          instructions,
-          imageUrl,
-        },
-        { new: true }
-      );
-
-      res.redirect("/auth/home");
+          id,
+          {
+            title,
+            cuisine,
+            prepTime,
+            cookTime,
+            servings,
+            instructions,
+            Ingredients: ingredientsIds,
+            imageUrl,
+          },
+          { new: true }
+        );
+        res.redirect("/auth/home");
+      
     } catch (err) {
       console.error(err);
     }
@@ -186,7 +209,6 @@ router.get("/details/:id", async (req, res) => {
       ingredientIds.push(searchedRecipe.Ingredients[i].id);
     }
     const ingredients = await Ingredient.find({ 'id': { $in: ingredientIds } });
-    console.log(ingredients)
 
     const recipeNutrient = {
       servings: searchedRecipe.servings,
@@ -230,26 +252,5 @@ function calculateNutrientAmount(servingSize, quantity, foodNutrientAmount) {
   return foodNutrientSingleAmount * quantity;
 }
 
-async function getIngredientsData(id) {
-  try {
-     let res = await axios({
-          url: `https://api.nal.usda.gov/fdc/v1/foods?fdcIds=${id}&nutrients=203,208,269,291,307,601,605,606&api_key=6htf03n46hsW3piW88qt8gDIpAha0ewMtWfshMqC`,
-          method: 'get',
-          timeout: 8000,
-          headers: {
-              'Content-Type': 'application/json',
-          }
-      })
-      if(res.status == 200){
-          // test for status you want, etc
-          console.log(res.status)
-      }    
-      // Don't forget to return something   
-      return res.data
-  }
-  catch (err) {
-      console.error(err);
-  }
-}
 
 module.exports = router;
