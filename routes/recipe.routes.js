@@ -123,10 +123,8 @@ router.post(
       let imageUrl;
       if (req.file) {
         imageUrl = req.file.path;
-
       } else {
         imageUrl = existingImage;
-
       }
 
       await Recipe.findByIdAndUpdate(
@@ -172,12 +170,11 @@ router.get("/list", async (req, res) => {
   }
 });
 
-
 router.get("/details/:id", async (req, res) => {
   try {
     const { currentUser } = req.session;
     const { id } = req.params;
-    
+
     const searchedRecipe = await Recipe.findById(id)
       .populate("Owner comments Ingredients")
       .populate({
@@ -189,30 +186,28 @@ router.get("/details/:id", async (req, res) => {
         },
       });
 
-      
     let ingredientIdsString = "";
     for (let i = 0; i < searchedRecipe.Ingredients.length; i++) {
       ingredientIdsString += searchedRecipe.Ingredients[i].id + ",";
     }
-    
+
     const recipeNutrient = {
       servings: searchedRecipe.servings,
       calories: 0,
       totalFat: {
         saturatedFat: 0,
-        transFat: 0
+        transFat: 0,
       },
       cholesterol: 0,
       sodium: 0,
       totalCarbohydrate: {
         dietaryFiber: 0,
-        sugars: 0
+        sugars: 0,
       },
       protein: 0,
     };
 
-    getIngredientsData(ingredientIdsString)
-    .then(ingredientsResponse => {
+    getIngredientsData(ingredientIdsString).then((ingredientsResponse) => {
       for (let i = 0; i < ingredientsResponse.length; i++) {
         let ingredientElement = ingredientsResponse[i];
         let ingredientServingSize = ingredientElement.servingSize;
@@ -220,45 +215,81 @@ router.get("/details/:id", async (req, res) => {
         if (ingredientServingSize === undefined) {
           ingredientServingSize = 1;
         }
-        console.log(ingredientElement)
-        let foodNutrients = ingredientElement.foodNutrients
+        console.log(ingredientElement);
+        let foodNutrients = ingredientElement.foodNutrients;
         for (let j = 0; j < foodNutrients.length; j++) {
           let foodNutrient = foodNutrients[j];
           // let nutrientName = foodNutrient.nutrient.name.toLowerCase();
           // console.log(foodNutrient.nutrient.name.toLowerCase());
-          switch(foodNutrient.nutrient.name) {
-            case "Energy": 
-              recipeNutrient.calories += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount);
+          switch (foodNutrient.nutrient.name) {
+            case "Energy":
+              recipeNutrient.calories += calculateNutrientAmount(
+                ingredientServingSize,
+                ingredientQuantity,
+                foodNutrient.amount
+              );
               break;
-            case "Fatty acids, total saturated": 
-              recipeNutrient.totalFat.saturatedFat += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount); 
+            case "Fatty acids, total saturated":
+              recipeNutrient.totalFat.saturatedFat += calculateNutrientAmount(
+                ingredientServingSize,
+                ingredientQuantity,
+                foodNutrient.amount
+              );
               break;
-            case "Fatty acids, total trans": 
-              recipeNutrient.totalFat.transFat += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount); 
+            case "Fatty acids, total trans":
+              recipeNutrient.totalFat.transFat += calculateNutrientAmount(
+                ingredientServingSize,
+                ingredientQuantity,
+                foodNutrient.amount
+              );
               break;
-            case "Cholesterol": 
-              recipeNutrient.cholesterol += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount); 
+            case "Cholesterol":
+              recipeNutrient.cholesterol += calculateNutrientAmount(
+                ingredientServingSize,
+                ingredientQuantity,
+                foodNutrient.amount
+              );
               break;
-            case "Sodium, Na": 
-              recipeNutrient.sodium += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount);
-             break;
+            case "Sodium, Na":
+              recipeNutrient.sodium += calculateNutrientAmount(
+                ingredientServingSize,
+                ingredientQuantity,
+                foodNutrient.amount
+              );
+              break;
             case "Fiber, total dietary":
-              recipeNutrient.totalCarbohydrate.dietaryFiber += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount);
+              recipeNutrient.totalCarbohydrate.dietaryFiber +=
+                calculateNutrientAmount(
+                  ingredientServingSize,
+                  ingredientQuantity,
+                  foodNutrient.amount
+                );
               break;
             case "Sugars, total including NLEA":
-              recipeNutrient.totalCarbohydrate.sugars += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount);
-              break;            
-            case "Protein": 
-              recipeNutrient.protein += calculateNutrientAmount(ingredientServingSize, ingredientQuantity, foodNutrient.amount);
+              recipeNutrient.totalCarbohydrate.sugars +=
+                calculateNutrientAmount(
+                  ingredientServingSize,
+                  ingredientQuantity,
+                  foodNutrient.amount
+                );
+              break;
+            case "Protein":
+              recipeNutrient.protein += calculateNutrientAmount(
+                ingredientServingSize,
+                ingredientQuantity,
+                foodNutrient.amount
+              );
               break;
           }
         }
       }
       console.log(recipeNutrient);
-      res.render("recipe/details", { searchedRecipe, recipeNutrient, currentUser });
+      res.render("recipe/details", {
+        searchedRecipe,
+        recipeNutrient,
+        currentUser,
+      });
     });
-    
-    
   } catch (err) {
     console.log(err);
   }
@@ -271,23 +302,22 @@ function calculateNutrientAmount(servingSize, quantity, foodNutrientAmount) {
 
 async function getIngredientsData(id) {
   try {
-     let res = await axios({
-          url: `https://api.nal.usda.gov/fdc/v1/foods?fdcIds=${id}&nutrients=203,208,269,291,307,601,605,606&api_key=6htf03n46hsW3piW88qt8gDIpAha0ewMtWfshMqC`,
-          method: 'get',
-          timeout: 8000,
-          headers: {
-              'Content-Type': 'application/json',
-          }
-      })
-      if(res.status == 200){
-          // test for status you want, etc
-          console.log(res.status)
-      }    
-      // Don't forget to return something   
-      return res.data
-  }
-  catch (err) {
-      console.error(err);
+    let res = await axios({
+      url: `https://api.nal.usda.gov/fdc/v1/foods?fdcIds=${id}&nutrients=203,208,269,291,307,601,605,606&api_key=6htf03n46hsW3piW88qt8gDIpAha0ewMtWfshMqC`,
+      method: "get",
+      timeout: 8000,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (res.status == 200) {
+      // test for status you want, etc
+      console.log(res.status);
+    }
+    // Don't forget to return something
+    return res.data;
+  } catch (err) {
+    console.error(err);
   }
 }
 
