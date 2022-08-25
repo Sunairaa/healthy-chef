@@ -52,8 +52,6 @@ router.get("/login", isLoggedOut, (req, res) => {
 
 router.post("/login", isLoggedOut, async (req, res) => {
   try {
-    console.log(req.body);
-
     const { email, password } = req.body;
 
     if (email === "" || password === "") {
@@ -71,7 +69,6 @@ router.post("/login", isLoggedOut, async (req, res) => {
       return;
     } else if (bcrypt.compareSync(password, user.password)) {
       req.session.currentUser = user;
-      console.log("maxiUser", user);
       res.redirect("/auth/home");
     }
   } catch (err) {

@@ -19,8 +19,6 @@ router.post("/recipe/:id", async (req, res) => {
       author: currentUser._id,
       date: Date.now(),
     });
-    console.log("NewComment", newComment);
-
     recipeToComment.comments.push(newComment._id);
 
     await recipeToComment.save();

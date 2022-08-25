@@ -7,7 +7,6 @@ const RecipeIngredient = require("../models/RecipeIngredient.model");
 const Comment = require("../models/Comment.model");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
 const { Router } = require("express");
-const async = require("hbs/lib/async");
 const fileUploader = require("../config/cloudinary.config");
 
 // GET route - for create recipe form
@@ -92,8 +91,8 @@ router.get("/update/:id", isLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
     const { currentUser } = req.session;
-    console.log(currentUser);
-    const recipeToUpdate = await Recipe.findById(id);
+    const recipeToUpdate = await Recipe.findById(id).populate("Ingredients");
+    console.log(recipeToUpdate);
     res.render("recipe/update", { recipeToUpdate, currentUser });
   } catch (err) {
     console.error(err);
@@ -107,6 +106,7 @@ router.post(
   fileUploader.single("recipe-cover-image"),
   async (req, res) => {
     try {
+      console.log("req.body", req.body);
       const { id } = req.params;
       const {
         title,
@@ -121,10 +121,8 @@ router.post(
       let imageUrl;
       if (req.file) {
         imageUrl = req.file.path;
-        console.log(`if: ${imageUrl}`);
       } else {
         imageUrl = existingImage;
-        console.log(`else: ${imageUrl}`);
       }
 
       await Recipe.findByIdAndUpdate(
@@ -140,6 +138,7 @@ router.post(
         },
         { new: true }
       );
+
       res.redirect("/auth/home");
     } catch (err) {
       console.error(err);
@@ -159,7 +158,6 @@ router.post("/delete/:id", isLoggedIn, async (req, res) => {
 });
 
 // GET route - for list all recipe
-
 router.get("/list", async (req, res) => {
   try {
     const { currentUser } = req.session;
@@ -184,8 +182,6 @@ router.get("/details/:id", async (req, res) => {
           model: "User",
         },
       });
-    console.log("searchedRecipe", searchedRecipe);
-
 
     res.render("recipe/details", { searchedRecipe, currentUser });
   } catch (err) {
