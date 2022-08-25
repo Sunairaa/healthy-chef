@@ -4,6 +4,7 @@ const axios = require("axios"); // make calls to external APIs
 const router = require("express").Router();
 const User = require("../models/User.model");
 const Recipe = require("../models/Recipe.model");
+const Ingredient = require("../models/Ingredient.model");
 const RecipeIngredient = require("../models/RecipeIngredient.model");
 const Comment = require("../models/Comment.model");
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard");
@@ -11,10 +12,16 @@ const { Router } = require("express");
 const fileUploader = require("../config/cloudinary.config");
 
 // GET route - for create recipe form
-router.get("/create", isLoggedIn, (req, res) => {
-  //  const loggedInNavigation = true;
-  const { currentUser } = req.session;
-  res.render("recipe/create", { currentUser });
+router.get("/create", isLoggedIn, async (req, res) => {
+  try{
+    //  const loggedInNavigation = true;
+    const { currentUser } = req.session;
+    const ingredients = await Ingredient.find()
+    console.log(`IngredientData: ${ingredients}`)
+    res.render("recipe/create", { currentUser, ingredients });
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 // POST route - for submit recipe create form
