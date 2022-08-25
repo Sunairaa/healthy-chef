@@ -1,74 +1,92 @@
-<div class="container">
-    <div class="row row-cols-1">
-        <div class="col">
-            <h1>{{searchedRecipe.title}}</h1>
-            <p>Created by {{searchedRecipe.Owner.fullName}}</p>
-        </div>
+<div class="px-4 py-5 text-center recipe-detail-hero text-light">
+    <h1 class="display-5 fw-bold">{{searchedRecipe.title}} </h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">Created by {{searchedRecipe.Owner.fullName}} </p>
     </div>
+</div>
 
-    <div class="row row-cols-4">
+<div class="container-fluid">
+    <div class="recipe-detail-info  p-5 text-center row row-cols-4 bg-light ">
         <div class="col">
-            <p>Preparation Time</p>
+            <p class="fw-bold">Preparation Time</p>
             <h3>{{searchedRecipe.prepTime}}</h3>
         </div>
         <div class="col">
-            <p>Cooking Time</p>
+            <p class="fw-bold">Cooking Time</p>
             <h3>{{searchedRecipe.cookTime}}</h3>
         </div>
         <div class="col">
-            <p>Total Time</p>
+            <p class="fw-bold">Total Time</p>
             <h3>{{searchedRecipe.totalTime}} </h3>
         </div>
         <div class="col">
-            <p>Serves</p>
+            <p class="fw-bold">Serves</p>
             <h3>{{searchedRecipe.servings}}</h3>
         </div>
     </div>
 
     <div class="row row-cols-2">
-        <div class="col">
-            <h3> Ingredients</h3>
+        <div class="p-4 col-4 d-flex flex-column align-items-center bg-light">
+            <img class="img-fluid" src="{{searchedRecipe.imageUrl}}">
+            <h3 class="mt-3 mb-3"> Ingredients</h3>
             {{#each searchedRecipe.Ingredients}}
-            <ul>
+            <ul class="list-unstyled mb-1">
                 <li> {{this.name}}</li>
             </ul>
             {{/each}}
+        </div>
+
+        <div class="col-8">
+            <h3 class="mb-3 mt-3 d-flex justify-content-center">Instructions</h3>
+            <p class="p-5">{{searchedRecipe.instructions}}</p>
+        </div>
+    </div>
+
+    <div class="row row-cols-2">
+        <div class="p-4 col-4 d-flex flex-column align-items-center bg-light">
             {{#if recipeNutrient}}
-                <p>Serving: {{recipeNutrient.servings}}</p>
-                <p>Calories: {{recipeNutrient.calories}}</p>
-                <p>Saturated Fat: {{recipeNutrient.totalFat.saturatedFat}}</p>
-                <p>Trans Fat: {{recipeNutrient.totalFat.transFat}}</p>
-                <p>Cholestrol: {{recipeNutrient.cholestrol}}</p>
-                <p>Sodium: {{recipeNutrient.sodium}}</p>
-                <p>Dietary Carbs: {{recipeNutrient.totalCarbohydrate.dietaryFiber}}</p>
-                <p>Sugar Carbs: {{recipeNutrient.totalCarbohydrate.sugars}}</p>
-                <p>Protein: {{recipeNutrient.protein}}</p>
+            <h3 class="mb-3 mt-3"> Nutrients</h3>
+            <p class="mb-1">Serving: {{recipeNutrient.servings}}</p>
+            <p class="mb-1">Calories: {{recipeNutrient.calories}}</p>
+            <p class="mb-1">Saturated Fat: {{recipeNutrient.totalFat.saturatedFat}}</p>
+            <p class="mb-1">Trans Fat: {{recipeNutrient.totalFat.transFat}}</p>
+            <p class="mb-1">Cholestrol: {{recipeNutrient.cholestrol}}</p>
+            <p class="mb-1">Sodium: {{recipeNutrient.sodium}}</p>
+            <p class="mb-1">Dietary Carbs: {{recipeNutrient.totalCarbohydrate.dietaryFiber}}</p>
+            <p class="mb-1">Sugar Carbs: {{recipeNutrient.totalCarbohydrate.sugars}}</p>
+            <p class="mb-1">Protein: {{recipeNutrient.protein}}</p>
             {{/if}}
         </div>
 
-
-        <div class="col">
-            <h3> Information</h3>
-            <canvas id="foodNutrients-chart">
-
-            </canvas>
+        <div class="col-8 d-flex flex-column align-items-center  justify-content-center">
+            <h3 class="mb-3 mt-3"> Information</h3>
+            <div class="w-50">
+                <canvas id="foodNutrients-chart"></canvas>
+            </div>
             <script>
                 //  const data = {{{ json searchedRecipe.Ingredients }}};
                 //console.log(data)
 
                 const data = {
-                    labels: ['Fat', 'Proteins', 'Sugar'],
-
                     datasets: [
                         {
-                            data: [10, 5, 19]
+                            data: [10, 10, 10, 10, 15, 19, 10],
+                            backgroundColor: [
+                                'rgb(238, 96, 85)',
+                                'rgb(208, 33, 42)',
+                                'rgb(221, 161, 94)',
+                                'rgb(179, 201, 208)',
+                                'rgb(254, 250, 224)',
+                                'rgb(71, 171, 204)',
+                                'rgb(255, 99, 132)',
+                            ],
                         }
-                    ]
+                    ],
+                    labels: ['Saturated Fat', "Trans Fat", "Cholestrol", "Sodium", "Dietary Carbs", "Sugar Carbs", "Protein"],
                 };
 
                 function printChart(dataToPrint) {
                     const ctx = document.getElementById("foodNutrients-chart").getContext("2d");
-
                     const chart = new Chart(ctx, {
                         type: "pie",
                         data: dataToPrint,
@@ -85,68 +103,48 @@
                             },
                         },
                     });
-
-
                 }
-
                 document.addEventListener('DOMContentLoaded', () => {
-                    // do stuff with data here
                     printChart(data);
-
                 })
-
             </script>
-
-
-
-            <h3> Instructions</h3>
-            <p>{{searchedRecipe.instructions}}</p>
         </div>
     </div>
 
     {{#if currentUser}}
 
-    <section>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-5 col-md-6 col-12 pb-4">
-                    <h1>Comments</h1>
-
-                    {{#if searchedRecipe.comments}}
-
-                    {{#each searchedRecipe.comments}}
-
-                    <div class="comment mt-4 text-justify float-left">
-                        <img src="{{this.author.imageUrl}}" alt="" class="rounded-circle" width="40" height="40">
-                        <h4>{{this.title}}</h4>
-                        <p>{{this.author.fullName}}</p>
-                        <span>{{this.date}} </span>
-                        <br>
-                        <p>{{this.content}}</p>
-                    </div>
-
-                    {{/each}}
-                    {{/if}}
-                </div>
-                <div class="col-lg-4 col-md-5 col-sm-4 offset-md-1 offset-sm-1 col-12 mt-4">
-                    <form id="algin-form" action="/comment/recipe/{{searchedRecipe._id}}" method="post">
-                        <div class="form-group">
-                            <h4>Leave a comment</h4>
-                            <label for="title">Title</label>
-                            <input type=" text" name="title" id="title" />
-                            <br>
-                            <label for="content">Message</label>
-                            <textarea name="content" id="content" cols="30" rows="5" class="form-control"></textarea>
-                        </div>
-                        <div class=" form-group">
-                            <button type="submit" class="btn btn-success">Post Comment</button>
-                        </div>
-                    </form>
-                </div>
+    <div class="row">
+        <h1 class="col-9 mt-5 mb-3 text-center">Comments</h1>
+        <div class="col-8 p-4 d-flex flex-column align-items-center ">
+            {{#if searchedRecipe.comments}}
+            {{#each searchedRecipe.comments}}
+            <div class="comment mt-4 text-justify float-left">
+                <img src="{{this.author.imageUrl}}" alt="" class="rounded-circle" width="40" height="40">
+                <h4>{{this.title}}</h4>
+                <p>{{this.author.fullName}}</p>
+                <span>{{this.date}} </span>
+                <br>
+                <p>{{this.content}}</p>
             </div>
+            {{/each}}
+            {{/if}}
         </div>
-    </section>
+
+        <div class="col-4 mt-4">
+            <form id="algin-form" action="/comment/recipe/{{searchedRecipe._id}}" method="post">
+                <div class="form-group">
+                    <h4>Leave a comment</h4>
+                    <label for="title">Title</label>
+                    <input type=" text" name="title" id="title" />
+                    <br><br>
+                    <label for="content">Message</label>
+                    <textarea name="content" id="content" cols="30" rows="5" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success mt-3">Post Comment</button>
+                </div>
+            </form>
+        </div>
+    </div>
     {{/if}}
-
-
 </div>

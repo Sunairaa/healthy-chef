@@ -114,10 +114,8 @@ router.post(
       let imageUrl;
       if (req.file) {
         imageUrl = req.file.path;
-
       } else {
         imageUrl = existingImage;
-
       }
 
       await Recipe.findByIdAndUpdate(
@@ -163,12 +161,11 @@ router.get("/list", async (req, res) => {
   }
 });
 
-
 router.get("/details/:id", async (req, res) => {
   try {
     const { currentUser } = req.session;
     const { id } = req.params;
-    
+
     const searchedRecipe = await Recipe.findById(id)
       .populate("Owner comments Ingredients")
       .populate({
@@ -180,13 +177,13 @@ router.get("/details/:id", async (req, res) => {
         },
       });
 
-      
     let ingredientIds = [];
+    
     for (let i = 0; i < searchedRecipe.Ingredients.length; i++) {
       ingredientIds.push(searchedRecipe.Ingredients[i].id);
     }
+
     const ingredients = await Ingredient.find({ 'id': { $in: ingredientIds } });
-    console.log(ingredients)
 
     const recipeNutrient = {
       servings: searchedRecipe.servings,
@@ -194,15 +191,16 @@ router.get("/details/:id", async (req, res) => {
       totalFat: {
         totalFat: 0,
         saturatedFat: 0,
-        transFat: 0
+        transFat: 0,
       },
       totalCarbohydrate: {
         totalCarbohydrate: 0,
         dietaryFiber: 0,
-        sugars: 0
+        sugars: 0,
       },
       protein: 0,
     };
+
 
     for (let i = 0; i < ingredients.length; i++) {
       let ingredientQuantity = searchedRecipe.Ingredients[i].quantity;
@@ -219,7 +217,6 @@ router.get("/details/:id", async (req, res) => {
       
     }
     res.render("recipe/details", { searchedRecipe, recipeNutrient, currentUser });
-    
   } catch (err) {
     console.log(err);
   }
@@ -232,23 +229,22 @@ function calculateNutrientAmount(servingSize, quantity, foodNutrientAmount) {
 
 async function getIngredientsData(id) {
   try {
-     let res = await axios({
-          url: `https://api.nal.usda.gov/fdc/v1/foods?fdcIds=${id}&nutrients=203,208,269,291,307,601,605,606&api_key=6htf03n46hsW3piW88qt8gDIpAha0ewMtWfshMqC`,
-          method: 'get',
-          timeout: 8000,
-          headers: {
-              'Content-Type': 'application/json',
-          }
-      })
-      if(res.status == 200){
-          // test for status you want, etc
-          console.log(res.status)
-      }    
-      // Don't forget to return something   
-      return res.data
-  }
-  catch (err) {
-      console.error(err);
+    let res = await axios({
+      url: `https://api.nal.usda.gov/fdc/v1/foods?fdcIds=${id}&nutrients=203,208,269,291,307,601,605,606&api_key=6htf03n46hsW3piW88qt8gDIpAha0ewMtWfshMqC`,
+      method: "get",
+      timeout: 8000,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (res.status == 200) {
+      // test for status you want, etc
+      console.log(res.status);
+    }
+    // Don't forget to return something
+    return res.data;
+  } catch (err) {
+    console.error(err);
   }
 }
 

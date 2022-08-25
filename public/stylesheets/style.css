@@ -1,7 +1,6 @@
 body {
   /* padding: 50px; */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  font-size: 10px;
 }
 
 a {
@@ -18,10 +17,6 @@ main {
   background-image: url(../images/index-cover.jpg);
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url(../images/index-cover.jpg) no-repeat center center;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,10 +76,23 @@ main {
 
 .home-hero {
   background-image: url(../images/home-cover.jpg);
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url(../images/home-cover.jpg) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
 }
+
+/* RECIPE DETAIL PAGE */
+
+.recipe-detail-hero {
+  background-image: url(../images/recipe-details-cover.jpg);
+  background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9))
+    url(../images/recipe-details-cover.jpg) no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
