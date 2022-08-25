@@ -104,3 +104,26 @@ nav {
     display: none;
   }
 }
+
+footer {
+  width: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.features {
+  flex-grow: 1;
+}
+
+.recipe-instructions-text {
+  white-space: pre-wrap;
+}
+
+#deletebtn {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
