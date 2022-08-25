@@ -13,11 +13,11 @@ const fileUploader = require("../config/cloudinary.config");
 
 // GET route - for create recipe form
 router.get("/create", isLoggedIn, async (req, res) => {
-  try{
+  try {
     //  const loggedInNavigation = true;
     const { currentUser } = req.session;
-    const ingredients = await Ingredient.find()
-    console.log(`IngredientData: ${ingredients}`)
+    const ingredients = await Ingredient.find();
+    console.log(`IngredientData: ${ingredients}`);
     res.render("recipe/create", { currentUser, ingredients });
   } catch (err) {
     console.error(err);
@@ -178,12 +178,12 @@ router.get("/details/:id", async (req, res) => {
       });
 
     let ingredientIds = [];
-    
+
     for (let i = 0; i < searchedRecipe.Ingredients.length; i++) {
       ingredientIds.push(searchedRecipe.Ingredients[i].id);
     }
 
-    const ingredients = await Ingredient.find({ 'id': { $in: ingredientIds } });
+    const ingredients = await Ingredient.find({ id: { $in: ingredientIds } });
 
     const recipeNutrient = {
       servings: searchedRecipe.servings,
@@ -201,22 +201,58 @@ router.get("/details/:id", async (req, res) => {
       protein: 0,
     };
 
-
     for (let i = 0; i < ingredients.length; i++) {
       let ingredientQuantity = searchedRecipe.Ingredients[i].quantity;
       let nutrients = ingredients[i].nutrients;
       let servingSize = ingredients[i].servingSize;
-      recipeNutrient.calories += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.calories)
-      recipeNutrient.totalFat.totalFat += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalFat.totalFat);
-      recipeNutrient.totalFat.saturatedFat += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalFat.saturatedFat);
-      recipeNutrient.totalFat.transFat += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalFat.transFat);
-      recipeNutrient.totalCarbohydrate.totalCarbohydrate += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalCarbohydrate.totalCarbohydrate);
-      recipeNutrient.totalCarbohydrate.dietaryFiber += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalCarbohydrate.dietaryFiber);
-      recipeNutrient.totalCarbohydrate.sugars += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.totalCarbohydrate.sugars);
-      recipeNutrient.protein += calculateNutrientAmount(servingSize, ingredientQuantity, nutrients.protein);
-      
+      recipeNutrient.calories += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.calories
+      );
+      recipeNutrient.totalFat.totalFat += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.totalFat.totalFat
+      );
+      recipeNutrient.totalFat.saturatedFat += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.totalFat.saturatedFat
+      );
+      recipeNutrient.totalFat.transFat += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.totalFat.transFat
+      );
+      recipeNutrient.totalCarbohydrate.totalCarbohydrate +=
+        calculateNutrientAmount(
+          servingSize,
+          ingredientQuantity,
+          nutrients.totalCarbohydrate.totalCarbohydrate
+        );
+      recipeNutrient.totalCarbohydrate.dietaryFiber += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.totalCarbohydrate.dietaryFiber
+      );
+      recipeNutrient.totalCarbohydrate.sugars += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.totalCarbohydrate.sugars
+      );
+      recipeNutrient.protein += calculateNutrientAmount(
+        servingSize,
+        ingredientQuantity,
+        nutrients.protein
+      );
     }
-    res.render("recipe/details", { searchedRecipe, recipeNutrient, currentUser });
+    console.log(recipeNutrient);
+    res.render("recipe/details", {
+      searchedRecipe,
+      recipeNutrient,
+      currentUser,
+    });
   } catch (err) {
     console.log(err);
   }
