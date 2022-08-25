@@ -1,6 +1,7 @@
 body {
   /* padding: 50px; */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-size: 10px;
 }
 
 a {
@@ -11,9 +12,77 @@ h1 {
   color: 15px;
 }
 
+/* INDEX PAGE */
+
+main {
+  background-image: url(../images/index-cover.jpg);
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(../images/index-cover.jpg) no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  gap: 1rem;
+  margin: 0 auto;
+  padding: 3rem;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.marketing {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 1rem;
+}
+
+.marketing .col-lg-4 {
+  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+.marketing .col-lg-4 p {
+  margin-top: 1rem;
+  margin-right: 0.75rem;
+  margin-left: 0.75rem;
+  font-size: 1rem;
+}
+
+.marketing .col-lg-4 h2 {
+  margin-top: 1rem;
+}
+
+.featurette-divider {
+  margin: 2rem 0;
+  width: 40%;
+}
+
+.index-img-feature {
+  object-fit: cover;
+  width: 140px;
+  height: 140px;
+}
+
+/* HOME PAGE */
+
 .home-hero {
   background-image: url(../images/home-cover.jpg);
-  background: url(../images/home-cover.jpg) no-repeat center center; 
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))
+    url(../images/home-cover.jpg) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

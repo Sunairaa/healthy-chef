@@ -6,10 +6,6 @@ const fileUploader = require("../config/cloudinary.config");
 
 router.get("/", isLoggedIn, (req, res) => {
   const { currentUser } = req.session;
-
-  console.log(req.session);
-
-  console.log(currentUser);
   res.render("profil/profil", { currentUser });
 });
 
@@ -21,7 +17,6 @@ router.post(
     try {
       const { currentUser } = req.session;
       currentUser.imageUrl = req.file.path;
-      console.log(currentUser);
       res.render("profil/profil", { currentUser });
     } catch (err) {
       console.log(err);
