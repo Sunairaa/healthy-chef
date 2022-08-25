@@ -84,8 +84,6 @@ main {
   background-size: cover;
 }
 
-/* RECIPE DETAIL PAGE */
-
 .recipe-detail-hero {
   background-image: url(../images/recipe-details-cover.jpg);
   background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9))
@@ -96,3 +94,13 @@ main {
   background-size: cover;
 }
 
+nav {
+  background-color: #54436b;
+}
+
+@media only screen and (max-width: 600px) {
+  #signin img,
+  #login img {
+    display: none;
+  }
+}
