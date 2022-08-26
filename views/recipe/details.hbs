@@ -39,27 +39,7 @@
             {{/each}}
         </div>
 
-        <div class="col-8">
-            <h3 class="mb-3 mt-3 d-flex justify-content-center">Instructions</h3>
-            <p class="p-5 recipe-instructions-text">{{searchedRecipe.instructions}}</p>
-        </div>
-    </div>
 
-    <div class="row row-cols-2">
-        <div class="p-4 col-4 d-flex flex-column align-items-center bg-light">
-            {{#if recipeNutrient}}
-            <h3 class="mb-3 mt-3"> Nutrients</h3>
-            <p class="mb-1">Serving: {{recipeNutrient.servings}}</p>
-            <p class="mb-1">Calories: {{recipeNutrient.calories}}</p>
-            <p class="mb-1">Saturated Fat: {{recipeNutrient.totalFat.saturatedFat}}</p>
-            <p class="mb-1">Trans Fat: {{recipeNutrient.totalFat.transFat}}</p>
-            <p class="mb-1">Cholestrol: {{recipeNutrient.cholestrol}}</p>
-            <p class="mb-1">Sodium: {{recipeNutrient.sodium}}</p>
-            <p class="mb-1">Dietary Carbs: {{recipeNutrient.totalCarbohydrate.dietaryFiber}}</p>
-            <p class="mb-1">Sugar Carbs: {{recipeNutrient.totalCarbohydrate.sugars}}</p>
-            <p class="mb-1">Protein: {{recipeNutrient.protein}}</p>
-            {{/if}}
-        </div>
 
         <div class="col-8 d-flex flex-column align-items-center  justify-content-center">
             <h3 class="mb-3 mt-3"> Information</h3>
@@ -67,9 +47,6 @@
                 <canvas id="foodNutrients-chart"></canvas>
             </div>
             <script>
-                //  const data = {{{ json searchedRecipe.Ingredients }}};
-                //console.log(data)
-
                 const data = {
                     datasets: [
                         {
@@ -114,12 +91,41 @@
         </div>
     </div>
 
+
+
+
+       
+    </div>
+
+    <div class="row row-cols-2">
+        <div class="p-4 col-4 d-flex flex-column align-items-center bg-light">
+            {{#if recipeNutrient}}
+            <h3 class="mb-3 mt-3"> Nutrients</h3>
+            <p class="mb-1">Serving: {{recipeNutrient.servings}}</p>
+            <p class="mb-1">Calories: {{recipeNutrient.calories}}</p>
+            <p class="mb-1">Saturated Fat: {{recipeNutrient.totalFat.saturatedFat}}</p>
+            <p class="mb-1">Trans Fat: {{recipeNutrient.totalFat.transFat}}</p>
+            <p class="mb-1">Cholestrol: {{recipeNutrient.cholestrol}}</p>
+            <p class="mb-1">Sodium: {{recipeNutrient.sodium}}</p>
+            <p class="mb-1">Dietary Carbs: {{recipeNutrient.totalCarbohydrate.dietaryFiber}}</p>
+            <p class="mb-1">Sugar Carbs: {{recipeNutrient.totalCarbohydrate.sugars}}</p>
+            <p class="mb-1">Protein: {{recipeNutrient.protein}}</p>
+            {{/if}}
+        </div>
+
+         <div class="col-8">
+            <h3 class="mb-3 mt-3 d-flex justify-content-center">Instructions</h3>
+            <p class="p-5 recipe-instructions-text">{{searchedRecipe.instructions}}</p>
+        </div>
+
+
     {{#if currentUser}}
 
-    <div class="d-flex justify-content-center align-self-center row row-cols-2">
-        <h1 class=" mt-5 mb-3 text-center">Comments</h1>
+   
+
         {{#if searchedRecipe.comments}}
-            <div class="col-8 p-4 d-flex flex-column align-items-center ">
+            <h1 class=" mt-5 mb-3 text-center">Comments</h1>
+            <div class="col-8 p-4 d-flex flex-column align-items-center">
                 {{#each searchedRecipe.comments}}
                 <div class="comment mt-4 text-justify float-left">
                     <img src="{{this.author.imageUrl}}" alt="" class="rounded-circle" width="40" height="40">
