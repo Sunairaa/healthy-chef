@@ -42,8 +42,8 @@
   {
     "id": "3",
     "title": "Olive oil",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 884.0,
       "totalFat": {
@@ -62,8 +62,8 @@
   {
     "id": "4",
     "title": "Olive",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 115,
       "totalFat": {
@@ -82,8 +82,8 @@
   {
     "id": "5",
     "title": "Lemon",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 29,
       "totalFat": {
@@ -102,8 +102,8 @@
   {
     "id": "6",
     "title": "Tomatoes",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 18,
       "totalFat": {
@@ -122,8 +122,8 @@
   {
     "id": "7",
     "title": "Cucumber",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 33,
       "totalFat": {
@@ -142,8 +142,8 @@
   {
     "id": "8",
     "title": "Sweet potatoes",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 533,
       "totalFat": {
@@ -162,8 +162,8 @@
   {
     "id": "9",
     "title": "Quinoa",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 120,
       "totalFat": {
@@ -182,8 +182,8 @@
   {
     "id": "10",
     "title": "Kale",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 3.6,
       "totalFat": {
@@ -202,8 +202,8 @@
   {
     "id": "11",
     "title": "Rice",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 130,
       "totalFat": {
@@ -222,8 +222,8 @@
   {
     "id": "12",
     "title": "Lettuce",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 15,
       "totalFat": {
@@ -242,8 +242,8 @@
   {
     "id": "13",
     "title": "Chickpea",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 364,
       "totalFat": {
@@ -262,8 +262,8 @@
   {
     "id": "14",
     "title": "Salmon",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 208,
       "totalFat": {
@@ -282,8 +282,8 @@
   {
     "id": "15",
     "title": "Corn",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 96,
       "totalFat": {
@@ -303,7 +303,7 @@
     "id": "16",
     "title": "Banana",
     "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSizeUnit": "",
     "nutrients": {
       "calories": 86,
       "totalFat": {
@@ -323,7 +323,7 @@
     "id": "17",
     "title": "Marple Syrup",
     "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSizeUnit": "ml",
     "nutrients": {
       "calories": 260,
       "totalFat": {
@@ -342,8 +342,8 @@
   {
     "id": "18",
     "title": "Flour",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 364,
       "totalFat": {
@@ -362,8 +362,8 @@
   {
     "id": "19",
     "title": "Sugar",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 387,
       "totalFat": {
@@ -382,8 +382,8 @@
   {
     "id": "20",
     "title": "Baking Powder",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 53,
       "totalFat": {
@@ -402,10 +402,10 @@
   {
     "id": "21",
     "title": "Milk",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "ml",
     "nutrients": {
-      "calories": 42,
+      "calories": 44,
       "totalFat": {
         "totalFat": 1,
         "saturatedFat": 0.6,
@@ -422,8 +422,8 @@
   {
     "id": "22",
     "title": "Butter",
-    "servingSize": 1,
-    "servingSizeUnit": "100g",
+    "servingSize": 100,
+    "servingSizeUnit": "g",
     "nutrients": {
       "calories": 717,
       "totalFat": {
