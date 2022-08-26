@@ -32,10 +32,10 @@
                     <h3>{{this.title}}</h3>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <a href="/recipe/details/{{this._id}}" class="btn btn-sm btn-outline-secondary">View</a>
-                            <a href="/recipe/update/{{this._id}}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                            <a href="/recipe/details/{{this._id}}" class="btn btn-sm btn-outline-success m-1">View</a>
+                            <a href="/recipe/update/{{this._id}}" class="btn btn-sm btn-outline-primary m-1">Edit</a>
                             <form method="POST" action="/recipe/delete/{{this._id}}"><button
-                                    class="btn btn-sm btn-outline-secondary" id="deletebtn" type="submit">Delete</button></form>
+                                    class="btn btn-sm btn-outline-danger m-1" id="deletebtn" type="submit">Delete</button></form>
                         </div>
                         <small class="text-muted">{{this.totalTime}} mins</small>
                     </div>

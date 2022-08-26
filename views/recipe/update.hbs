@@ -54,7 +54,7 @@
 
                 <ul class="col-md-12" id="ingredientsData">
                     {{#each recipeToUpdate.Ingredients}}
-                    <li class="ingredient"><input value="{{this.name}}"><input placeholder="quantity" type="number" value="{{this.quantity}}"><input hidden="true" class="item_id" value="{{this.id}}"><input hidden="true" class="ingredient_object_id" value="{{this._id}}"><button type="button" class="deleteIngredientBtn">-</button></li>
+                    <li class="ingredient d-flex"><input value="{{this.name}}"><input placeholder="quantity" class="form-control" type="number" value="{{this.quantity}}"><input hidden="true" class="item_id form-control" value="{{this.id}}"><input hidden="true" class="ingredient_object_id" value="{{this._id}}"><button type="button" class="deleteIngredientBtn btn btn-danger">-</button></li>
                     {{/each}}
                 </ul>
 

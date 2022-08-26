@@ -73,7 +73,7 @@ function addIngredient(id, title) {
   deleteBtn.setAttribute("type", "button");
   deleteBtn.setAttribute("class", "deleteIngredientBtn");
   deleteBtn.textContent = "-";
-  deleteBtn.className = "btn btn-success";
+  deleteBtn.className = "btn btn-success btn-danger";
   ingredientsDataItem.appendChild(deleteBtn);
 
   handleDelete(deleteBtn);
