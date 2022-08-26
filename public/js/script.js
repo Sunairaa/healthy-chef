@@ -18,47 +18,55 @@ let deleteBtns = document.querySelectorAll(".deleteIngredientBtn");
 const items = [];
 
 ingredients.addEventListener("input", async () => {
-  let element_input = document.getElementById('inputIngredients');
-  let element_datalist = document.getElementById('datalistOptions');
-  let opSelected = element_datalist.querySelector(`[value="${element_input.value}"]`);
+  let element_input = document.getElementById("inputIngredients");
+  let element_datalist = document.getElementById("datalistOptions");
+  let opSelected = element_datalist.querySelector(
+    `[value="${element_input.value}"]`
+  );
   if (opSelected != null) {
     addIngredientBtn.disabled = false;
   }
 });
 
-addIngredientBtn.addEventListener('click', () => {
-  let element_input = document.getElementById('inputIngredients');
-  let element_datalist = document.getElementById('datalistOptions');
-  let opSelected = element_datalist.querySelector(`[value="${element_input.value}"]`);
-  let id = opSelected.getAttribute('data-value');
-  let title = opSelected.getAttribute('value');
+addIngredientBtn.addEventListener("click", () => {
+  let element_input = document.getElementById("inputIngredients");
+  let element_datalist = document.getElementById("datalistOptions");
+  let opSelected = element_datalist.querySelector(
+    `[value="${element_input.value}"]`
+  );
+  let id = opSelected.getAttribute("data-value");
+  let title = opSelected.getAttribute("value");
 
   addIngredient(id, title);
   ingredients.value = "";
   addIngredientBtn.disabled = true;
-})
+});
 
 function addIngredient(id, title) {
   //create Div for each ingredient and append to parent div
   const ingredientsDataItem = document.createElement("li");
-  ingredientsDataItem.setAttribute("class", "ingredient");
+  ingredientsDataItem.setAttribute("class", "ingredient d-flex ");
   ingredientsData.appendChild(ingredientsDataItem);
 
   //create input for selected name
   const inputIngredientName = document.createElement("input");
   inputIngredientName.setAttribute("value", title);
+  inputIngredientName.className = "form-control";
+  inputIngredientName.style.width = "250px";
   ingredientsDataItem.appendChild(inputIngredientName);
 
   //create input for user to select quantity
   const inputIngredientQuantity = document.createElement("input");
-  inputIngredientQuantity.setAttribute("placeholder", "quantity");
+  inputIngredientQuantity.setAttribute("placeholder", "grams or unit serving");
   inputIngredientQuantity.setAttribute("type", "number");
+  inputIngredientQuantity.className = "form-control";
+  inputIngredientQuantity.style.width = "250px";
   ingredientsDataItem.appendChild(inputIngredientQuantity);
 
   //create hidden input to retrieve id
   const inputIngredientId = document.createElement("input");
   inputIngredientId.setAttribute("hidden", true);
-  inputIngredientId.setAttribute("class", "item_id")
+  inputIngredientId.setAttribute("class", "item_id");
   inputIngredientId.setAttribute("value", id);
   ingredientsDataItem.appendChild(inputIngredientId);
 
@@ -66,8 +74,9 @@ function addIngredient(id, title) {
   deleteBtn.setAttribute("type", "button");
   deleteBtn.setAttribute("class", "deleteIngredientBtn");
   deleteBtn.textContent = "-";
+  deleteBtn.className = "btn btn-success";
   ingredientsDataItem.appendChild(deleteBtn);
-  
+
   handleDelete(deleteBtn);
 }
 
@@ -77,33 +86,32 @@ function handleDelete(deleteBtn) {
   });
 }
 
-
 // prevent to submit form on enter key press
-document.getElementById("form").onkeypress = function(e) {
-  var key = e.charCode || e.keyCode || 0;     
+document.getElementById("form").onkeypress = function (e) {
+  var key = e.charCode || e.keyCode || 0;
   if (key == 13) {
     e.preventDefault();
   }
-} 
+};
 
-createRecipeBtn.addEventListener('click', () => {
-  const items = document.querySelectorAll('.ingredient')
-  let itemsArray = []
+createRecipeBtn.addEventListener("click", () => {
+  const items = document.querySelectorAll(".ingredient");
+  let itemsArray = [];
 
   items.forEach((item) => {
     let id = item.childNodes[2].value;
     let name = item.childNodes[0].value;
     let quantity = item.childNodes[1].value;
     const itemObj = {
-      "id": id,
-      "name": name,
-      "quantity": quantity
-    }
-    itemsArray.push(itemObj)
-  })
-  console.log(itemsArray)
+      id: id,
+      name: name,
+      quantity: quantity,
+    };
+    itemsArray.push(itemObj);
+  });
+  console.log(itemsArray);
   let ingredientsInput = document.getElementById("inputIngredientsPair");
   ingredientsInput.value = JSON.stringify(itemsArray);
 
   document.getElementById("form").submit();
-})
+});
