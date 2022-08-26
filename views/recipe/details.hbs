@@ -6,7 +6,6 @@
     </div>
 </div>
 
-<div class="container-fluid">
     <div class="recipe-detail-info  p-5 text-center row row-cols-4 bg-light ">
         <div class="col">
             <p class="fw-bold">Preparation Time</p>
@@ -26,7 +25,10 @@
         </div>
     </div>
 
-    <div class="row row-cols-2">
+<div class="container-fluid">
+
+
+    <div class="row row-cols-2 p-2">
         <div class="p-4 col-4 d-flex flex-column align-items-center bg-light">
             <img class="img-fluid" src="{{searchedRecipe.imageUrl}}">
             <h3 class="mt-3 mb-3 text-center"> Ingredients (serving or grams)</h3>
@@ -39,8 +41,6 @@
             {{/each}}
         </div>
 
-
-
         <div class="col-8 d-flex flex-column align-items-center  justify-content-center">
             <h3 class="mb-3 mt-3"> Information</h3>
             <div class="w-50">
@@ -48,9 +48,18 @@
             </div>
             <script>
                 const data = {
+                    labels: ["Total Fat", "Saturated Fat", "Trans Fat", "Total Carbohydrate", "Dietary Carbs", "Sugar Carbs", "Protein"],
                     datasets: [
                         {
-                            data: [10, 10, 10, 10, 15, 19, 10],
+                            data: [
+                                {{ recipeNutrient.totalFat.totalFat }},
+                                {{ recipeNutrient.totalFat.saturatedFat }},
+                                {{ recipeNutrient.totalFat.transFat }},
+                                {{ recipeNutrient.totalCarbohydrate.totalCarbohydrate }},
+                                {{ recipeNutrient.totalCarbohydrate.dietaryFiber }},
+                                {{ recipeNutrient.totalCarbohydrate.sugars }},
+                                {{ recipeNutrient.protein }}
+                            ],
                             backgroundColor: [
                                 'rgb(238, 96, 85)',
                                 'rgb(208, 33, 42)',
@@ -62,7 +71,6 @@
                             ],
                         }
                     ],
-                    labels: ['Saturated Fat', "Trans Fat", "Cholestrol", "Sodium", "Dietary Carbs", "Sugar Carbs", "Protein"],
                 };
 
                 function printChart(dataToPrint) {

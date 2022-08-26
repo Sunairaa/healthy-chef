@@ -3,7 +3,7 @@
         <div class="col-12 col-md-12 ">
             <h1 class="text-center">Update recipe</h1>
 
-            <form action="/recipe/update/{{recipeToUpdate._id}}" enctype="multipart/form-data" method="POST"
+            <form action="/recipe/update/{{recipeToUpdate._id}}" id="createForm" enctype="multipart/form-data" method="POST"
                 class="row g-3">
 
                 <div class="col-md-12">
@@ -11,7 +11,7 @@
                     <input type="text" name="title" class="form-control" id="inputTitle"
                         value="{{recipeToUpdate.title}}" required>
                 </div>
-
+                
                 <div class="col-md-12">
                     <label for="inputCuisine" class="form-label">Cuisine</label>
                     <input type="text" name="cuisine" class="form-control" id="inputCuisine"
@@ -38,9 +38,25 @@
 
                 <div class="col-md-12">
                     <label for="inputIngredients" class="form-label">Ingredients</label>
-                    <input type="text" name="Ingredients" class="form-control" id="inputIngredients"
-                        value="{{recipeToUpdate.Ingredients}}">
+                    <div class="input-group">
+                        
+                        <input class="form-control" list="datalistOptions" name="inputIngredients" id="inputIngredients"
+                        placeholder="Search for ingredients...">
+                        <input type="button" class="input-group-text" id="add-ingredient-btn" value="+">
+                    </div>
+                    
+                    <datalist id="datalistOptions">
+                        {{#each ingredients}}
+                        <option data-value="{{this.id}}" value="{{this.title}}"></option>
+                        {{/each}}
+                    </datalist>
                 </div>
+
+                <ul class="col-md-12" id="ingredientsData">
+                    {{#each recipeToUpdate.Ingredients}}
+                    <li class="ingredient"><input value="{{this.name}}"><input placeholder="quantity" type="number" value="{{this.quantity}}"><input hidden="true" class="item_id" value="{{this.id}}"><input hidden="true" class="ingredient_object_id" value="{{this._id}}"><button type="button" class="deleteIngredientBtn">-</button></li>
+                    {{/each}}
+                </ul>
 
                 <div class="col-md-12">
                     <label for="instructions" class="form-label">Instructions</label>
@@ -54,8 +70,10 @@
                         value="{{recipeToUpdate.imageUrl}} " />
                 </div>
 
+                <input name="Ingredients" id="inputIngredientsPair" hidden>
+
                 <div class="col-12">
-                    <button type="submit" class="btn btn-success">Update</button>
+                    <button type="button" class="btn btn-success" id="create-recipe-btn">Update</button>
                 </div>
             </form>
 
