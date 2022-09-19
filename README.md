@@ -40,7 +40,7 @@ DATA STRUCTURE
   * Auth
   * comment
   * index
-  * profil
+  * profile
   * recipe
 - seed
 - Views
@@ -55,7 +55,9 @@ DATA STRUCTURE
 - app.js
 
 Github: https://github.com/Sunairaa/healthy-chef/
+
 Slides: https://docs.google.com/presentation/d/1xF9Pfur-lstCmehUQpHt1KNTpSM37DnY03zS4kwMXJc/edit?usp=sharing
-Heroku : https://healthy-chef.herokuapp.com/
+
+Deplpoyment : https://healthy-chef.herokuapp.com/
 
 
